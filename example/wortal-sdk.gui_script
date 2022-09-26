@@ -1,0 +1,49 @@
+local dirtylarry = require "dirtylarry/dirtylarry"
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+local function on_before_ad(self)
+	-- Pause game
+	print("BeforeAd Callback")
+end
+
+local function on_after_ad(self)
+	-- Resume game
+	print("AfterAd Callback")
+end
+
+local function on_reward_ad(self)
+	-- Reward the player
+	print("AdViewed Callback")
+end
+
+local function on_skip_ad(self)
+	-- Don't reward - player skipped ad
+	print("AdDismissed Callback")
+end
+
+function on_input(self, action_id, action)
+	if html5 then
+		dirtylarry:button("interstitial", action_id, action, function()
+			print("Calling for interstitial ad..")
+			wortal_sdk.show_interstitial("next", "NextLevel", on_before_ad, on_after_ad)
+		end)
+
+		dirtylarry:button("rewarded", action_id, action, function()
+			print("Calling for rewarded ad..")
+			wortal_sdk.show_rewarded("ReviveAndContinue", on_before_ad, on_after_ad, on_skip_ad, on_reward_ad)
+		end)
+
+		dirtylarry:button("levelStart", action_id, action, function()
+			print("Logging level start..")
+			wortal_sdk.log_level_start("Test")
+		end)
+
+		dirtylarry:button("levelEnd", action_id, action, function()
+			print("Logging level end..")
+			wortal_sdk.log_level_end("Test", "100")
+		end)
+	end
+end
