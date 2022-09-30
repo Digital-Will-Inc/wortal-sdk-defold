@@ -1,0 +1,27 @@
+name: Feature
+description: Request a new feature
+title: "[Feature] "
+labels: ["Type: Feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing a feature request, please search for similar requests in the existing issues.
+
+        ---
+
+        Thank you for taking the time to file a feature request. To address this request as fast as possible, we need some information.
+  - type: input
+    id: feature
+    attributes:
+      label: Feature Requested
+      description: "What feature are you requesting to be added to the project?"
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reasoning for Feature
+      description: "What is the reasoning or rationale behind adding this feature?"
+    validations:
+      required: true

@@ -1,0 +1,50 @@
+name: Bug
+description: File a bug report
+title: "[Bug] "
+labels: ["Type: Bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a bug report, please search for similar behavior in the existing issues.
+
+        ---
+
+        Thank you for taking the time to file a bug report. To address this bug as fast as possible, we need some information.
+  - type: input
+    id: sdk
+    attributes:
+      label: SDK Version
+      description: "Which version of the SDK did this issue appear in?"
+      placeholder: "1.0.1"
+    validations:
+      required: true
+  - type: input
+    id: engine
+    attributes:
+      label: Engine Version
+      description: "Which version of the game engine did this issue appear in?"
+      placeholder: "2021.3.18"
+    validations:
+      required: true
+  - type: textarea
+    id: bug
+    attributes:
+      label: Bug Description
+      description: "What happened?"
+      placeholder: "X thing did Y behavior when it should have done Z."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: "What steps need to be taken to reproduce this issue?"
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: "If applicable, provide relevant log output. No need for backticks here."
+      render: Shell
