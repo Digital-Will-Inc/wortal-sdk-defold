@@ -3,6 +3,7 @@ var gameData = {
     browser: navigator.userAgent,
     gameName: document.title,
     country: "",
+    isAdBlocked: false,
     linkInterstitialId: "",
     linkRewardedId: "",
     gameTimer: 0,
@@ -44,6 +45,10 @@ window.addEventListener("load", () => {
                 }
             });
         }
+    }, function () {
+        console.log("[Wortal] Ad blocker detected.");
+        _removeLoadingCover();
+        gameData.isAdBlocked = true;
     });
 
     window.addEventListener('visibilitychange', () => {

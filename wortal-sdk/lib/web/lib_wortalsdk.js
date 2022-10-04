@@ -10,22 +10,18 @@ var LibWortalSdk = {
         _adViewedCallbackPtr: null,
 
         beforeAdCallback: function () {
-            console.log("Calling before ad..");
             {{{ makeDynCall("v", "WortalSdk._beforeAdCallbackPtr") }}}();
         },
 
         afterAdCallback: function () {
-            console.log("Calling after ad..");
             {{{ makeDynCall("v", "WortalSdk._afterAdCallbackPtr") }}}();
         },
 
         adDismissedCallback: function () {
-            console.log("Calling ad dismissed..");
             {{{ makeDynCall("v", "WortalSdk._adDismissedCallbackPtr") }}}();
         },
 
         adViewedCallback: function () {
-            console.log("Calling ad viewed..");
             {{{ makeDynCall("v", "WortalSdk._adViewedCallbackPtr") }}}();
         },
     },
@@ -33,13 +29,21 @@ var LibWortalSdk = {
     js_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback) {
         WortalSdk._beforeAdCallbackPtr = beforeAdCallback;
         WortalSdk._afterAdCallbackPtr = afterAdCallback;
+
+        if (gameData.isAdBlocked) {
+            console.log("[Wortal] Ads blocked");
+            WortalSdk.afterAdCallback();
+            return;
+        }
+
         var callbacks = {
             beforeAd: WortalSdk.beforeAdCallback,
             afterAd: WortalSdk.afterAdCallback,
             noShow: WortalSdk.afterAdCallback,
             noBreak: WortalSdk.afterAdCallback,
-            adBreakDone: () => console.log("AdBreakDone")
+            adBreakDone: () => console.log("[Wortal] AdBreakDone")
         };
+
         window.triggerWortalAd(UTF8ToString(placement), gameData.linkInterstitialId, UTF8ToString(description), callbacks);
     },
 
@@ -48,6 +52,14 @@ var LibWortalSdk = {
         WortalSdk._afterAdCallbackPtr = afterAdCallback;
         WortalSdk._adDismissedCallbackPtr = adDismissedCallback;
         WortalSdk._adViewedCallbackPtr = adViewedCallback;
+
+       if (gameData.isAdBlocked) {
+           console.log("[Wortal] Ads blocked");
+           WortalSdk.adDismissedCallback();
+           WortalSdk.afterAdCallback();
+           return;
+       }
+
         var callbacks = {
             beforeAd: WortalSdk.beforeAdCallback,
             afterAd: WortalSdk.afterAdCallback,
@@ -56,8 +68,9 @@ var LibWortalSdk = {
             adDismissed: WortalSdk.adDismissedCallback,
             adViewed: WortalSdk.adViewedCallback,
             beforeReward: (showAdFn) => showAdFn(),
-            adBreakDone: () => console.log("AdBreakDone")
+            adBreakDone: () => console.log("[Wortal] AdBreakDone")
         };
+
         window.triggerWortalAd('reward', gameData.linkRewardedId, UTF8ToString(description), callbacks);
     },
 
