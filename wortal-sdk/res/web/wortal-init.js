@@ -15,8 +15,8 @@ console.log('[Wortal] Platform: ' + gameData.platform);
 window.addEventListener("load", () => {
     window.initWortal(function () {
         console.log("[Wortal] Initializing..");
-        if (gameData.platform === 'link' || gameData.platform === 'viber') {
-            document.getElementById("loading-cover").style.display = "none";
+        if (gameData.platform === 'link') {
+            _removeLoadingCover();
             if (window.wortalGame) {
                 window.wortalGame.initializeAsync().then(() => {
                     Progress.addListener(val => wortalGame.setLoadingProgress(val));
@@ -24,15 +24,23 @@ window.addEventListener("load", () => {
                     _getLinkAdUnitIds();
                 });
             }
+        } else if (gameData.platform === 'viber') {
+            _removeLoadingCover();
+            if (window.wortalGame) {
+                window.wortalGame.initializeAsync().then(() => {
+                    Progress.addListener(val => wortalGame.setLoadingProgress(val));
+                    window.wortalGame.startGameAsync();
+                });
+            }
         } else {
             window.triggerWortalAd("preroll", "", "Preroll", {
                 adBreakDone: function () {
                     console.log("[Wortal] AdBreakDone");
-                    document.getElementById("loading-cover").style.display = "none";
+                    _removeLoadingCover();
                 },
                 noShow: function () {
                     console.log("[Wortal] NoShow");
-                    document.getElementById("loading-cover").style.display = "none";
+                    _removeLoadingCover();
                 }
             });
         }
@@ -106,4 +114,8 @@ function _logEvent(name, features) {
     request.open("POST", "https://wombat.digitalwill.co.jp/wortal/events");
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify({ name, features }));
+}
+
+function _removeLoadingCover() {
+    document.getElementById("loading-cover").style.display = "none";
 }
