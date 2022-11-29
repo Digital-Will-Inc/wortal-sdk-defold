@@ -25,25 +25,26 @@ local function on_skip_ad(self)
 end
 
 function on_input(self, action_id, action)
+	print("Parsing input..")
 	if html5 then
 		dirtylarry:button("interstitial", action_id, action, function()
 			print("Calling for interstitial ad..")
-			wortal_sdk.show_interstitial("next", "NextLevel", on_before_ad, on_after_ad)
+			wortal.ads_show_interstitial("next", "NextLevel", on_before_ad, on_after_ad)
 		end)
 
 		dirtylarry:button("rewarded", action_id, action, function()
 			print("Calling for rewarded ad..")
-			wortal_sdk.show_rewarded("ReviveAndContinue", on_before_ad, on_after_ad, on_skip_ad, on_reward_ad)
+			wortal.ads_show_rewarded("ReviveAndContinue", on_before_ad, on_after_ad, on_skip_ad, on_reward_ad)
 		end)
 
 		dirtylarry:button("levelStart", action_id, action, function()
 			print("Logging level start..")
-			wortal_sdk.log_level_start("Test")
+			wortal.analytics_log_level_start("Test")
 		end)
 
 		dirtylarry:button("levelEnd", action_id, action, function()
 			print("Logging level end..")
-			wortal_sdk.log_level_end("Test", "100")
+			wortal.analytics_log_level_end("Test", "100", true)
 		end)
 	end
 end

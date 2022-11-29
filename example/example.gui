@@ -1,4 +1,8 @@
 script: "/example/wortal-sdk.gui_script"
+fonts {
+  name: "larryfont"
+  font: "/dirtylarry/larryfont.font"
+}
 background_color {
   x: 0.0
   y: 0.0
@@ -7,8 +11,8 @@ background_color {
 }
 nodes {
   position {
-    x: 232.0
-    y: 406.0
+    x: 206.0
+    y: 607.0
     z: 0.0
     w: 1.0
   }
@@ -20,7 +24,72 @@ nodes {
   }
   scale {
     x: 1.0
+    y: 0.648
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
     y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Ads"
+  font: "larryfont"
+  id: "text_ads"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: false
+  text_leading: 1.0
+  text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+}
+nodes {
+  position {
+    x: 112.0
+    y: 542.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 0.5
+    y: 0.5
     z: 1.0
     w: 1.0
   }
@@ -173,8 +242,8 @@ nodes {
 }
 nodes {
   position {
-    x: 733.0
-    y: 405.0
+    x: 271.0
+    y: 541.0
     z: 0.0
     w: 1.0
   }
@@ -185,8 +254,8 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 1.0
-    y: 1.0
+    x: 0.5
+    y: 0.5
     z: 1.0
     w: 1.0
   }
@@ -339,8 +408,8 @@ nodes {
 }
 nodes {
   position {
-    x: 232.0
-    y: 176.0
+    x: 212.0
+    y: 470.0
     z: 0.0
     w: 1.0
   }
@@ -352,7 +421,72 @@ nodes {
   }
   scale {
     x: 1.0
+    y: 0.648
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
     y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "Analytics"
+  font: "larryfont"
+  id: "text_analytics"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  layer: ""
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: false
+  text_leading: 1.0
+  text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+}
+nodes {
+  position {
+    x: 113.0
+    y: 403.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 0.5
+    y: 0.5
     z: 1.0
     w: 1.0
   }
@@ -505,8 +639,8 @@ nodes {
 }
 nodes {
   position {
-    x: 729.0
-    y: 176.0
+    x: 275.0
+    y: 404.0
     z: 0.0
     w: 1.0
   }
@@ -517,8 +651,8 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 1.0
-    y: 1.0
+    x: 0.5
+    y: 0.5
     z: 1.0
     w: 1.0
   }
