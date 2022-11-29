@@ -1,4 +1,4 @@
-- name: wortal_sdk
+- name: wortal
   type: table
   desc: Functions and constants for interacting with Wortal SDK API
 
@@ -6,7 +6,7 @@
 
 #*****************************************************************************************************
 
-  - name: show_interstitial
+  - name: ads_show_interstitial
     type: function
 
     parameters:
@@ -24,7 +24,7 @@
 
 #*****************************************************************************************************
 
-  - name: show_rewarded
+  - name: ads_show_rewarded
     type: function
 
     parameters:
@@ -45,7 +45,7 @@
 
 #*****************************************************************************************************
 
-  - name: log_level_start
+  - name: analytics_log_level_start
     type: function
 
     parameters:
@@ -54,7 +54,7 @@
 
 #*****************************************************************************************************
 
-  - name: log_level_end
+  - name: analytics_log_level_end
     type: function
 
     parameters:
@@ -64,9 +64,12 @@
     - name: score
       type: string
 
+    - name: wasCompleted
+      type: boolean
+
 #*****************************************************************************************************
 
-  - name: log_level_up
+  - name: analytics_log_level_up
     type: function
 
     parameters:
@@ -75,7 +78,7 @@
 
 #*****************************************************************************************************
 
-  - name: log_score
+  - name: analytics_log_score
     type: function
 
     parameters:
@@ -84,7 +87,28 @@
 
 #*****************************************************************************************************
 
-  - name: log_game_choice
+  - name: analytics_log_tutorial_start
+    type: function
+
+    parameters:
+    - name: tutorial
+      type: string
+
+#*****************************************************************************************************
+
+  - name: analytics_log_tutorial_end
+    type: function
+
+    parameters:
+    - name: tutorial
+      type: string
+
+    - name: wasCompleted
+      type: boolean
+
+#*****************************************************************************************************
+
+  - name: analytics_log_game_choice
     type: function
 
     parameters:

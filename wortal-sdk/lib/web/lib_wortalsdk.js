@@ -1,5 +1,3 @@
-// https://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/Interacting-with-code.html
-
 var LibWortalSdk = {
 
     $WortalSdk: {
@@ -26,106 +24,81 @@ var LibWortalSdk = {
         },
     },
 
-    js_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback) {
+    //////////////////////////////////////////////////////////////////////
+    // Ads API
+    //////////////////////////////////////////////////////////////////////
+
+    Wortal_ads_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback) {
         WortalSdk._beforeAdCallbackPtr = beforeAdCallback;
         WortalSdk._afterAdCallbackPtr = afterAdCallback;
 
-        if (gameData.isAdBlocked) {
-            console.log("[Wortal] Ads blocked");
-            WortalSdk.afterAdCallback();
-            return;
-        }
-
-        var callbacks = {
-            beforeAd: WortalSdk.beforeAdCallback,
-            afterAd: WortalSdk.afterAdCallback,
-            noShow: WortalSdk.afterAdCallback,
-            noBreak: WortalSdk.afterAdCallback,
-            adBreakDone: () => console.log("[Wortal] AdBreakDone")
-        };
-
-        window.triggerWortalAd(UTF8ToString(placement), gameData.linkInterstitialId, UTF8ToString(description), callbacks);
+        window.Wortal.ads.showInterstitial(UTF8ToString(placement), UTF8ToString(description),
+            WortalSdk.beforeAdCallback, WortalSdk.afterAdCallback);
     },
 
-   js_showRewarded: function (description, beforeAdCallback, afterAdCallback, adDismissedCallback, adViewedCallback) {
+    Wortal_ads_showRewarded: function (description, beforeAdCallback, afterAdCallback, adDismissedCallback, adViewedCallback) {
         WortalSdk._beforeAdCallbackPtr = beforeAdCallback;
         WortalSdk._afterAdCallbackPtr = afterAdCallback;
         WortalSdk._adDismissedCallbackPtr = adDismissedCallback;
         WortalSdk._adViewedCallbackPtr = adViewedCallback;
 
-       if (gameData.isAdBlocked) {
-           console.log("[Wortal] Ads blocked");
-           WortalSdk.adDismissedCallback();
-           WortalSdk.afterAdCallback();
-           return;
-       }
-
-        var callbacks = {
-            beforeAd: WortalSdk.beforeAdCallback,
-            afterAd: WortalSdk.afterAdCallback,
-            noShow: WortalSdk.afterAdCallback,
-            noBreak: WortalSdk.afterAdCallback,
-            adDismissed: WortalSdk.adDismissedCallback,
-            adViewed: WortalSdk.adViewedCallback,
-            beforeReward: (showAdFn) => showAdFn(),
-            adBreakDone: () => console.log("[Wortal] AdBreakDone")
-        };
-
-        window.triggerWortalAd('reward', gameData.linkRewardedId, UTF8ToString(description), callbacks);
+        window.Wortal.ads.showRewarded(UTF8ToString(description), WortalSdk.beforeAdCallback, WortalSdk.afterAdCallback,
+            WortalSdk.adDismissedCallback, WortalSdk.adViewedCallback);
     },
 
-    js_logLevelStart: function (level) {
-        if (gameData.levelTimerHandle != null) {
-            clearInterval(gameData.levelTimerHandle);
-            gameData.levelTimerHandle = null;
-        }
-        gameData.levelName = level;
-        gameData.levelTimer = 0;
-        gameData.levelTimerHandle = setInterval(() => gameData.levelTimer += 1, 1000);
-        _logEvent("LevelStart", {
-            game: gameData.gameName,
-            level: level,
-        });
+    //////////////////////////////////////////////////////////////////////
+    // Analytics API
+    //////////////////////////////////////////////////////////////////////
+
+    Wortal_analytics_logLevelStart: function (level) {
+        window.Wortal.analytics.logLevelStart(UTF8ToString(level));
     },
 
-    js_logLevelEnd: function (level, score) {
-        if (gameData.levelTimerHandle != null) {
-            clearInterval(gameData.levelTimerHandle);
-            gameData.levelTimerHandle = null;
-        }
-        if (gameData.levelName !== level) {
-            gameData.levelTimer = 0;
-        }
-        _logEvent("LevelEnd", {
-            game: gameData.gameName,
-            level: level,
-            time: gameData.levelTimer,
-            score: score,
-        });
-        gameData.levelTimer = 0;
+    Wortal_analytics_logLevelEnd: function (level, score, wasCompleted) {
+        const completed = wasCompleted > 0;
+        window.Wortal.analytics.logLevelEnd(UTF8ToString(level), UTF8ToString(score), completed);
     },
 
-    js_logLevelUp: function (level) {
-        _logEvent("LevelUp", {
-            game: gameData.gameName,
-            level: level
-        });
+    Wortal_analytics_logLevelUp: function (level) {
+        window.Wortal.analytics.logLevelUp(UTF8ToString(level));
     },
 
-    js_logScore: function (score) {
-        _logEvent("PostScore", {
-            game: gameData.gameName,
-            score: score
-        });
+    Wortal_analytics_logScore: function (score) {
+        window.Wortal.analytics.logScore(UTF8ToString(score));
     },
 
-    js_logGameChoice: function (decision, choice) {
-        _logEvent("GameChoice", {
-            game: gameData.gameName,
-            decision: decision,
-            choice: choice,
-        });
+    Wortal_analytics_logTutorialStart: function (tutorial) {
+        window.Wortal.analytics.logTutorialStart(UTF8ToString(tutorial));
     },
+
+    Wortal_analytics_logTutorialEnd: function (tutorial, wasCompleted) {
+        const completed = wasCompleted > 0;
+        window.Wortal.analytics.logTutorialEnd(UTF8ToString(tutorial), completed);
+    },
+
+    Wortal_analytics_logGameChoice: function (decision, choice) {
+        window.Wortal.analytics.logGameChoice(UTF8ToString(decision), UTF8ToString(choice))
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // Context API
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+    // In-App Purchases API
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+    // Leaderboard API
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+    // Player API
+    //////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////
+    // Session API
+    //////////////////////////////////////////////////////////////////////
 }
 
 autoAddDeps(LibWortalSdk, '$WortalSdk');
