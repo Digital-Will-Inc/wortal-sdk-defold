@@ -1,4 +1,4 @@
-script: "/example/wortal-sdk.gui_script"
+script: "/example/wortal.gui_script"
 fonts {
   name: "larryfont"
   font: "/dirtylarry/larryfont.font"

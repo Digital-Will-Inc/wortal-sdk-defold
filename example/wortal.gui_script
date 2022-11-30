@@ -1,5 +1,5 @@
 local dirtylarry = require "dirtylarry/dirtylarry"
-local json = require "wortal-sdk.utils.json"
+local json = require "wortal.utils.json"
 
 function init(self)
 	msg.post(".", "acquire_input_focus")

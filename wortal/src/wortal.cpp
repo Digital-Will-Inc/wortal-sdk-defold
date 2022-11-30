@@ -1,9 +1,9 @@
-#include "wortalsdk.h"
+#include "wortal.h"
 #include "luautils.h"
 #include <dmsdk/sdk.h>
 
-#define EXTENSION_NAME WortalSDK
-#define LIB_NAME "WortalSdk"
+#define EXTENSION_NAME Wortal
+#define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
 #define VERSION "2.0.0"
 
