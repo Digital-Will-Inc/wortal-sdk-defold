@@ -2,9 +2,9 @@
 #include "luautils.h"
 #include <dmsdk/sdk.h>
 
-#define EXTENSION_NAME wortalsdk
+#define EXTENSION_NAME WortalSDK
 #define LIB_NAME "WortalSdk"
-#define MODULE_NAME "wortal_sdk"
+#define MODULE_NAME "wortal"
 #define VERSION "2.0.0"
 
 #if defined(DM_PLATFORM_HTML5)
