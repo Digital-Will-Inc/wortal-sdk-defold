@@ -1,27 +1,35 @@
-var LibWortalSdk = {
+var WortalLib = {
 
-    $WortalSdk: {
-
+    $Ads: {
         _beforeAdCallbackPtr: null,
         _afterAdCallbackPtr: null,
         _adDismissedCallbackPtr: null,
         _adViewedCallbackPtr: null,
 
         beforeAdCallback: function () {
-            {{{ makeDynCall("v", "WortalSdk._beforeAdCallbackPtr") }}}();
+            {{{ makeDynCall("v", "Ads._beforeAdCallbackPtr") }}}();
         },
 
         afterAdCallback: function () {
-            {{{ makeDynCall("v", "WortalSdk._afterAdCallbackPtr") }}}();
+            {{{ makeDynCall("v", "Ads._afterAdCallbackPtr") }}}();
         },
 
         adDismissedCallback: function () {
-            {{{ makeDynCall("v", "WortalSdk._adDismissedCallbackPtr") }}}();
+            {{{ makeDynCall("v", "Ads._adDismissedCallbackPtr") }}}();
         },
 
         adViewedCallback: function () {
-            {{{ makeDynCall("v", "WortalSdk._adViewedCallbackPtr") }}}();
+            {{{ makeDynCall("v", "Ads._adViewedCallbackPtr") }}}();
         },
+    },
+
+    $Utils: {
+        allocateString: function(str) {
+            return allocate(intArrayFromString(str), ALLOC_STACK);
+        },
+        toJson: function(str) {
+            return JSON.parse(UTF8ToString(str));
+        }
     },
 
     //////////////////////////////////////////////////////////////////////
@@ -29,21 +37,21 @@ var LibWortalSdk = {
     //////////////////////////////////////////////////////////////////////
 
     Wortal_ads_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback) {
-        WortalSdk._beforeAdCallbackPtr = beforeAdCallback;
-        WortalSdk._afterAdCallbackPtr = afterAdCallback;
+        Ads._beforeAdCallbackPtr = beforeAdCallback;
+        Ads._afterAdCallbackPtr = afterAdCallback;
 
         window.Wortal.ads.showInterstitial(UTF8ToString(placement), UTF8ToString(description),
-            WortalSdk.beforeAdCallback, WortalSdk.afterAdCallback);
+            Ads.beforeAdCallback, Ads.afterAdCallback);
     },
 
     Wortal_ads_showRewarded: function (description, beforeAdCallback, afterAdCallback, adDismissedCallback, adViewedCallback) {
-        WortalSdk._beforeAdCallbackPtr = beforeAdCallback;
-        WortalSdk._afterAdCallbackPtr = afterAdCallback;
-        WortalSdk._adDismissedCallbackPtr = adDismissedCallback;
-        WortalSdk._adViewedCallbackPtr = adViewedCallback;
+        Ads._beforeAdCallbackPtr = beforeAdCallback;
+        Ads._afterAdCallbackPtr = afterAdCallback;
+        Ads._adDismissedCallbackPtr = adDismissedCallback;
+        Ads._adViewedCallbackPtr = adViewedCallback;
 
-        window.Wortal.ads.showRewarded(UTF8ToString(description), WortalSdk.beforeAdCallback, WortalSdk.afterAdCallback,
-            WortalSdk.adDismissedCallback, WortalSdk.adViewedCallback);
+        window.Wortal.ads.showRewarded(UTF8ToString(description), Ads.beforeAdCallback, Ads.afterAdCallback,
+            Ads.adDismissedCallback, Ads.adViewedCallback);
     },
 
     //////////////////////////////////////////////////////////////////////
@@ -84,6 +92,70 @@ var LibWortalSdk = {
     // Context API
     //////////////////////////////////////////////////////////////////////
 
+    Wortal_context_getID: function () {
+        const id = window.Wortal.context.getId();
+        if (id) {
+            return Utils.allocateString(id);
+        } else {
+            return null;
+        }
+    },
+
+    Wortal_context_chooseAsync: function (payload, callback, errorCallback) {
+        window.Wortal.context.chooseAsync(Utils.toJson(payload))
+            .then(() => {
+                {{{ makeDynCall("v", "callback") }}}();
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+            });
+    },
+
+    Wortal_context_shareAsync: function (payload, callback, errorCallback) {
+        window.Wortal.context.shareAsync(Utils.toJson(payload))
+            .then(shareResult => {
+                {{{ makeDynCall("vi", "callback") }}}(shareResult);
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+            });
+    },
+
+    Wortal_context_updateAsync: function (payload, callback, errorCallback) {
+        window.Wortal.context.updateAsync(Utils.toJson(payload))
+            .then(() => {
+                {{{ makeDynCall("v", "callback") }}}();
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+            });
+    },
+
+    Wortal_context_switchAsync: function (contextId, callback, errorCallback) {
+        window.Wortal.context.switchAsync(Utils.toJson(contextId))
+            .then(() => {
+                {{{ makeDynCall("v", "callback") }}}();
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+            });
+    },
+
+    Wortal_context_createAsync: function (playerId, callback, errorCallback) {
+        window.Wortal.context.createAsync(Utils.toJson(playerId))
+            .then(() => {
+                {{{ makeDynCall("v", "callback") }}}();
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+            });
+    },
+
     //////////////////////////////////////////////////////////////////////
     // In-App Purchases API
     //////////////////////////////////////////////////////////////////////
@@ -101,5 +173,6 @@ var LibWortalSdk = {
     //////////////////////////////////////////////////////////////////////
 }
 
-autoAddDeps(LibWortalSdk, '$WortalSdk');
-mergeInto(LibraryManager.library, LibWortalSdk);
+autoAddDeps(WortalLib, '$Ads');
+autoAddDeps(WortalLib, '$Utils');
+mergeInto(LibraryManager.library, WortalLib);

@@ -1,4 +1,5 @@
 local dirtylarry = require "dirtylarry/dirtylarry"
+local json = require "wortal-sdk.utils.json"
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
@@ -49,6 +50,15 @@ function on_input(self, action_id, action)
 			gui.set_text(log, "levelEnd")
 			print("Logging level end..")
 			wortal.analytics_log_level_end("Test", "100", true)
+		end)
+
+		dirtylarry:button("contextChoose", action_id, action, function()
+			gui.set_text(log, "contextChoose")
+			print("Choosing context..")
+			local payload = {
+				image: "data:img",
+				text: "Let's Play!",
+			}
 		end)
 	end
 end

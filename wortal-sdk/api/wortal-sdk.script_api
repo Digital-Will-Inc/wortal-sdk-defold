@@ -1,6 +1,6 @@
 - name: wortal
   type: table
-  desc: Functions and constants for interacting with Wortal SDK API
+  desc: Functions for interacting with Wortal SDK
 
   members:
 
@@ -8,114 +8,236 @@
 
   - name: ads_show_interstitial
     type: function
+    desc: Shows an interstitial ad. These can be shown at various points in the game such as a level end, restart or a timed interval in games with longer levels.
 
     parameters:
     - name: placement
       type: string
-
+      desc: Placement type for the ads. Options are: next, pause, browse and start.
     - name: description
       type: string
-
+      desc: Description of the ad placement. Ex: Next Level
     - name: beforeAdCallback
       type: function
-
+      desc: Callback for before the ad is shown. Pause the game here.
     - name: afterAdCallback
       type: function
+      desc: Callback for after the ad is shown. Resume the game here.
 
 #*****************************************************************************************************
 
   - name: ads_show_rewarded
     type: function
+    desc: Shows a rewarded ad. These are longer, optional ads that the player can earn a reward for watching.
+
+          The player must be notified of the ad and give permission to show before it can be shown.
 
     parameters:
     - name: description
       type: string
-
+      desc: Description of the ad placement. Ex: Revive and continue
     - name: beforeAdCallback
       type: function
-
+      desc: Callback for before the ad is shown. Pause the game here.
     - name: afterAdCallback
       type: function
-
+      desc: Callback for after the ad is shown. Resume the game here.
     - name: adDismissedCallback
       type: function
-
+      desc: Callback for when the player dismissed the ad. Do not reward the player.
     - name: adViewedCallback
       type: function
+      desc: Callback for when the player has successfully watched the ad. Reward the player here.
 
 #*****************************************************************************************************
 
   - name: analytics_log_level_start
     type: function
+    desc: Logs the start of a level.
 
     parameters:
     - name: level
       type: string
+      desc: Name of the level.
 
 #*****************************************************************************************************
 
   - name: analytics_log_level_end
     type: function
+    desc: Logs the end of a level.
+
+          To ensure the level timer is recorded the level name must match the name passed into the previous logLevelStart call.
+          If it does not match then the timer will be logged at 0.
 
     parameters:
     - name: level
       type: string
-
+      desc: Name of the level.
     - name: score
       type: string
-
+      desc: Score the player achieved.
     - name: wasCompleted
       type: boolean
+      desc: Was the level completed or not.
 
 #*****************************************************************************************************
 
   - name: analytics_log_level_up
     type: function
+    desc: Logs the player achieving a new level.
 
     parameters:
     - name: level
       type: string
+      desc: Level the player achieved.
 
 #*****************************************************************************************************
 
   - name: analytics_log_score
     type: function
+    desc: Logs the player's score.
 
     parameters:
     - name: score
       type: string
+      desc: Score the player achieved.
 
 #*****************************************************************************************************
 
   - name: analytics_log_tutorial_start
     type: function
+    desc: Logs the start of a tutorial.
 
     parameters:
     - name: tutorial
       type: string
+      desc: Name of the tutorial.
 
 #*****************************************************************************************************
 
   - name: analytics_log_tutorial_end
     type: function
+    desc: Logs the end of a tutorial.
+
+          To ensure the level timer is recorded the tutorial name must match the name passed into the previous logTutorialStart call.
+          If it does not match then the timer will be logged at 0.
 
     parameters:
     - name: tutorial
       type: string
-
+      desc: Name of the tutorial.
     - name: wasCompleted
       type: boolean
+      desc: Was the tutorial completed.
 
 #*****************************************************************************************************
 
   - name: analytics_log_game_choice
     type: function
+    desc: Logs a choice the player made in the game. This can be a powerful tool for balancing the game and understanding what content the players are interacting with the most.
 
     parameters:
     - name: decision
       type: string
-
+      desc: Decision the player was faced with.
     - name: choice
       type: string
+      desc: Choice the player made.
+
+#*****************************************************************************************************
+
+  - name: context_get_id
+    type: function
+    desc: Gets the ID of the current context.
+
+    returns:
+    - name: id
+      type: string
+      desc: String ID of the current context if one exists. Null if the player is playing solo. Empty string if the game is being played on a platform that does not currently support context.
+
+#*****************************************************************************************************
+
+  - name: context_choose
+    type: function
+    desc: Opens the platform UI to select friends to invite and play with.
+
+    parameters:
+    - name: payload
+      type: string
+      desc: Object defining the options for the context choice.
+    - name: callback
+      type: function
+      desc: Void callback that is fired when the Promise is resolved in the SDK Core.
+    - name: errorCallback
+      type: function
+      desc: Error callback that is fired when the Promise is rejected in the SDK Core. Contains error code and message.
+
+#*****************************************************************************************************
+
+  - name: context_share
+    type: function
+    desc: Shares a message to the player's friends. Will trigger a UI for the player to choose which friends to share with.
+
+    parameters:
+    - name: payload
+      type: string
+      desc: Object defining the options for the context choice.
+    - name: callback
+      type: function
+      desc: Callback with the number of friends the message was shared with. Callback is fired when the Promise is resolved in the SDK Core.
+    - name: errorCallback
+      type: function
+      desc: Error callback that is fired when the Promise is rejected in the SDK Core. Contains error code and message.
+
+#*****************************************************************************************************
+
+  - name: context_update
+    type: function
+    desc: Posts an update to the current context. Will send a message to the chat thread of the current context.
+
+    parameters:
+    - name: payload
+      type: string
+      desc: Object defining the options for the context choice.
+    - name: callback
+      type: function
+      desc: Void callback that is fired when the Promise is resolved in the SDK Core.
+    - name: errorCallback
+      type: function
+      desc: Error callback that is fired when the Promise is rejected in the SDK Core. Contains error code and message.
+
+#*****************************************************************************************************
+
+  - name: context_switch
+    type: function
+    desc: Switches the current context to the context with the given ID.
+
+    parameters:
+    - name: contextId
+      type: string
+      desc: ID of the context to switch to.
+    - name: callback
+      type: function
+      desc: Void callback that is fired when the Promise is resolved in the SDK Core.
+    - name: errorCallback
+      type: function
+      desc: Error callback that is fired when the Promise is rejected in the SDK Core. Contains error code and message.
+
+#*****************************************************************************************************
+
+  - name: context_create
+    type: function
+    desc: Creates a context with the given player ID.
+
+    parameters:
+    - name: contextId
+      type: string
+      desc: ID of player to create a context with.
+    - name: callback
+      type: function
+      desc: Void callback that is fired when the Promise is resolved in the SDK Core.
+    - name: errorCallback
+      type: function
+      desc: Error callback that is fired when the Promise is rejected in the SDK Core. Contains error code and message.
 
 #*****************************************************************************************************
