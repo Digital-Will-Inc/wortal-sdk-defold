@@ -12,7 +12,7 @@ background_color {
 nodes {
   position {
     x: 320.0
-    y: 568.0
+    y: 330.0
     z: 0.0
     w: 1.0
   }
@@ -62,6 +62,9 @@ nodes {
   alpha: 1.0
   template_node_child: false
   size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
 }
 nodes {
   position {
@@ -102,6 +105,8 @@ nodes {
   alpha: 1.0
   template: "/gooey/themes/dirtylarry/components/button.gui"
   template_node_child: false
+  custom_type: 0
+  enabled: true
 }
 nodes {
   position {
@@ -157,6 +162,9 @@ nodes {
   alpha: 1.0
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
+  custom_type: 0
+  enabled: true
+  visible: true
 }
 nodes {
   position {
@@ -221,6 +229,9 @@ nodes {
   template_node_child: true
   text_leading: 1.0
   text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
 }
 nodes {
   position {
@@ -284,6 +295,9 @@ nodes {
   template_node_child: false
   text_leading: 1.0
   text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
 }
 layers {
   name: "below"
