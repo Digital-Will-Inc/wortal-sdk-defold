@@ -5,14 +5,14 @@
 #if defined(DM_PLATFORM_HTML5)
 
 // Ads callbacks
-typedef void (*OnBeforeAdCallback)();
-typedef void (*OnAfterAdCallback)();
-typedef void (*OnAdDismissedCallback)();
-typedef void (*OnAdViewedCallback)();
+typedef void (*OnBeforeAdCallback)(const int success);
+typedef void (*OnAfterAdCallback)(const int success);
+typedef void (*OnAdDismissedCallback)(const int success);
+typedef void (*OnAdViewedCallback)(const int success);
 
 // Context callbacks
-typedef void (*OnContextCallback)();
-typedef void (*OnContextShareCallback)(const int shareResult);
+typedef void (*OnContextCallback)(const int success, const char* error);
+typedef void (*OnContextShareCallback)(const int shareResult, const char* error);
 
 // IAP callbacks
 
@@ -21,9 +21,6 @@ typedef void (*OnContextShareCallback)(const int shareResult);
 // Player callbacks
 
 // Session callbacks
-
-// Error callback
-typedef void (*OnErrorCallback)(const char* error);
 
 extern "C" {
     // Ads API
@@ -44,11 +41,11 @@ extern "C" {
 
     // Context API
     char* Wortal_context_getID();
-    void Wortal_context_chooseAsync(const char* payload, OnContextCallback callback, OnErrorCallback errorCallback);
-    void Wortal_context_shareAsync(const char* payload, OnContextShareCallback callback, OnErrorCallback errorCallback);
-    void Wortal_context_updateAsync(const char* payload, OnContextCallback callback, OnErrorCallback errorCallback);
-    void Wortal_context_switchAsync(const char* contextId, OnContextCallback callback, OnErrorCallback errorCallback);
-    void Wortal_context_createAsync(const char* playerId, OnContextCallback callback, OnErrorCallback errorCallback);
+    void Wortal_context_chooseAsync(const char* payload, OnContextCallback callback);
+    void Wortal_context_shareAsync(const char* payload, OnContextShareCallback callback);
+    void Wortal_context_updateAsync(const char* payload, OnContextCallback callback);
+    void Wortal_context_switchAsync(const char* contextId, OnContextCallback callback);
+    void Wortal_context_createAsync(const char* playerId, OnContextCallback callback);
 }
 
 #endif

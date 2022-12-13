@@ -10,16 +10,20 @@
 #if defined(DM_PLATFORM_HTML5)
 
 //////////////////////////////////////////////////////////////////////
-// API error handler
+// Ads API
 //////////////////////////////////////////////////////////////////////
-lua_Listener onErrorListener;
 
-static void Wortal_OnError(const char* error) {
-    lua_State* L = onErrorListener.m_L;
+lua_Listener onBeforeAdListener;
+lua_Listener onAfterAdListener;
+lua_Listener onAdDismissedListener;
+lua_Listener onAdViewedListener;
+
+static void Wortal_Ads_OnBeforeAd(const int success) {
+    lua_State* L = onBeforeAdListener.m_L;
     int top = lua_gettop(L);
 
-    lua_pushlistener(L, onErrorListener);
-    lua_pushstring(L, error);
+    lua_pushlistener(L, onBeforeAdListener);
+    lua_pushboolean(L, success);
 
     int ret = lua_pcall(L, 2, 0, 0);
     if (ret != 0) {
@@ -29,36 +33,14 @@ static void Wortal_OnError(const char* error) {
     assert(top == lua_gettop(L));
 }
 
-//////////////////////////////////////////////////////////////////////
-// Ads API
-//////////////////////////////////////////////////////////////////////
-
-lua_Listener onBeforeAdListener;
-lua_Listener onAfterAdListener;
-lua_Listener onAdDismissedListener;
-lua_Listener onAdViewedListener;
-
-static void Wortal_Ads_OnBeforeAd() {
-    lua_State* L = onBeforeAdListener.m_L;
-    int top = lua_gettop(L);
-
-    lua_pushlistener(L, onBeforeAdListener);
-
-    int ret = lua_pcall(L, 1, 0, 0);
-    if (ret != 0) {
-        lua_pop(L, 1);
-    }
-
-    assert(top == lua_gettop(L));
-}
-
-static void Wortal_Ads_OnAfterAd() {
+static void Wortal_Ads_OnAfterAd(const int success) {
     lua_State* L = onAfterAdListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onAfterAdListener);
+    lua_pushboolean(L, success);
 
-    int ret = lua_pcall(L, 1, 0, 0);
+    int ret = lua_pcall(L, 2, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -66,13 +48,14 @@ static void Wortal_Ads_OnAfterAd() {
     assert(top == lua_gettop(L));
 }
 
-static void Wortal_Ads_OnAdDismissed() {
+static void Wortal_Ads_OnAdDismissed(const int success) {
     lua_State* L = onAdDismissedListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onAdDismissedListener);
+    lua_pushboolean(L, success);
 
-    int ret = lua_pcall(L, 1, 0, 0);
+    int ret = lua_pcall(L, 2, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -80,13 +63,14 @@ static void Wortal_Ads_OnAdDismissed() {
     assert(top == lua_gettop(L));
 }
 
-static void Wortal_Ads_OnAdViewed() {
+static void Wortal_Ads_OnAdViewed(const int success) {
     lua_State* L = onAdViewedListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onAdViewedListener);
+    lua_pushboolean(L, success);
 
-    int ret = lua_pcall(L, 1, 0, 0);
+    int ret = lua_pcall(L, 2, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -213,12 +197,20 @@ lua_Listener onContextUpdateListener;
 lua_Listener onContextSwitchListener;
 lua_Listener onContextCreateListener;
 
-static void Wortal_Context_OnContextChoose() {
+static void Wortal_Context_OnContextChoose(const int success, const char* error) {
     lua_State* L = onContextChooseListener.m_L;
 	int top = lua_gettop(L);
 
     lua_pushlistener(L, onContextChooseListener);
-    int ret = lua_pcall(L, 1, 0, 0);
+    lua_pushboolean(L, success);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -226,12 +218,18 @@ static void Wortal_Context_OnContextChoose() {
     assert(top == lua_gettop(L));
 }
 
-static void Wortal_Context_OnContextShare(const int shareResult) {
+static void Wortal_Context_OnContextShare(const int shareResult, const char* error) {
     lua_State* L = onContextShareListener.m_L;
 	int top = lua_gettop(L);
 
     lua_pushlistener(L, onContextShareListener);
     lua_pushnumber(L, shareResult);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
 
 	int ret = lua_pcall(L, 3, 0, 0);
 	if (ret != 0) {
@@ -241,12 +239,20 @@ static void Wortal_Context_OnContextShare(const int shareResult) {
 	assert(top == lua_gettop(L));
 }
 
-static void Wortal_Context_OnContextUpdate() {
+static void Wortal_Context_OnContextUpdate(const int success, const char* error) {
     lua_State* L = onContextUpdateListener.m_L;
 	int top = lua_gettop(L);
 
     lua_pushlistener(L, onContextUpdateListener);
-    int ret = lua_pcall(L, 1, 0, 0);
+    lua_pushboolean(L, success);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -254,12 +260,20 @@ static void Wortal_Context_OnContextUpdate() {
     assert(top == lua_gettop(L));
 }
 
-static void Wortal_Context_OnContextSwitch() {
+static void Wortal_Context_OnContextSwitch(const int success, const char* error) {
     lua_State* L = onContextSwitchListener.m_L;
 	int top = lua_gettop(L);
 
     lua_pushlistener(L, onContextSwitchListener);
-    int ret = lua_pcall(L, 1, 0, 0);
+    lua_pushboolean(L, success);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -267,12 +281,20 @@ static void Wortal_Context_OnContextSwitch() {
     assert(top == lua_gettop(L));
 }
 
-static void Wortal_Context_OnContextCreate() {
+static void Wortal_Context_OnContextCreate(const int success, const char* error) {
     lua_State* L = onContextCreateListener.m_L;
 	int top = lua_gettop(L);
 
     lua_pushlistener(L, onContextCreateListener);
-    int ret = lua_pcall(L, 1, 0, 0);
+    lua_pushboolean(L, success);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -300,8 +322,7 @@ static int Wortal_Context_ChooseAsync(lua_State* L) {
 
     const char* payload = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onContextChooseListener);
-    luaL_checklistener(L, 3, onErrorListener);
-    Wortal_context_chooseAsync(payload, (OnContextCallback)Wortal_Context_OnContextChoose, (OnErrorCallback)Wortal_OnError);
+    Wortal_context_chooseAsync(payload, (OnContextCallback)Wortal_Context_OnContextChoose);
 
 	assert(top == lua_gettop(L));
 	return 0;
@@ -312,8 +333,7 @@ static int Wortal_Context_ShareAsync(lua_State* L) {
 
     const char* payload = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onContextShareListener);
-    luaL_checklistener(L, 3, onErrorListener);
-    Wortal_context_shareAsync(payload, (OnContextShareCallback)Wortal_Context_OnContextShare, (OnErrorCallback)Wortal_OnError);
+    Wortal_context_shareAsync(payload, (OnContextShareCallback)Wortal_Context_OnContextShare);
 
 	assert(top == lua_gettop(L));
 	return 0;
@@ -324,8 +344,7 @@ static int Wortal_Context_UpdateAsync(lua_State* L) {
 
     const char* payload = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onContextUpdateListener);
-    luaL_checklistener(L, 3, onErrorListener);
-    Wortal_context_updateAsync(payload, (OnContextCallback)Wortal_Context_OnContextUpdate, (OnErrorCallback)Wortal_OnError);
+    Wortal_context_updateAsync(payload, (OnContextCallback)Wortal_Context_OnContextUpdate);
 
 	assert(top == lua_gettop(L));
 	return 0;
@@ -336,8 +355,7 @@ static int Wortal_Context_SwitchAsync(lua_State* L) {
 
     const char* contextId = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onContextSwitchListener);
-    luaL_checklistener(L, 3, onErrorListener);
-    Wortal_context_switchAsync(contextId, (OnContextCallback)Wortal_Context_OnContextSwitch, (OnErrorCallback)Wortal_OnError);
+    Wortal_context_switchAsync(contextId, (OnContextCallback)Wortal_Context_OnContextSwitch);
 
 	assert(top == lua_gettop(L));
 	return 0;
@@ -348,8 +366,7 @@ static int Wortal_Context_CreateAsync(lua_State* L) {
 
     const char* playerId = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onContextCreateListener);
-    luaL_checklistener(L, 3, onErrorListener);
-    Wortal_context_createAsync(playerId, (OnContextCallback)Wortal_Context_OnContextCreate, (OnErrorCallback)Wortal_OnError);
+    Wortal_context_createAsync(playerId, (OnContextCallback)Wortal_Context_OnContextCreate);
 
 	assert(top == lua_gettop(L));
 	return 0;

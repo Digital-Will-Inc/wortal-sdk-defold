@@ -7,19 +7,19 @@ var WortalLib = {
         _adViewedCallbackPtr: null,
 
         beforeAdCallback: function () {
-            {{{ makeDynCall("v", "Ads._beforeAdCallbackPtr") }}}();
+            {{{ makeDynCall("vi", "Ads._beforeAdCallbackPtr") }}}(1);
         },
 
         afterAdCallback: function () {
-            {{{ makeDynCall("v", "Ads._afterAdCallbackPtr") }}}();
+            {{{ makeDynCall("vi", "Ads._afterAdCallbackPtr") }}}(1);
         },
 
         adDismissedCallback: function () {
-            {{{ makeDynCall("v", "Ads._adDismissedCallbackPtr") }}}();
+            {{{ makeDynCall("vi", "Ads._adDismissedCallbackPtr") }}}(1);
         },
 
         adViewedCallback: function () {
-            {{{ makeDynCall("v", "Ads._adViewedCallbackPtr") }}}();
+            {{{ makeDynCall("vi", "Ads._adViewedCallbackPtr") }}}(1);
         },
     },
 
@@ -101,58 +101,58 @@ var WortalLib = {
         }
     },
 
-    Wortal_context_chooseAsync: function (payload, callback, errorCallback) {
+    Wortal_context_chooseAsync: function (payload, callback) {
         window.Wortal.context.chooseAsync(Utils.toJson(payload))
             .then(() => {
-                {{{ makeDynCall("v", "callback") }}}();
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
                 console.error(error);
-                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
 
-    Wortal_context_shareAsync: function (payload, callback, errorCallback) {
+    Wortal_context_shareAsync: function (payload, callback) {
         window.Wortal.context.shareAsync(Utils.toJson(payload))
             .then(shareResult => {
-                {{{ makeDynCall("vi", "callback") }}}(shareResult);
+                {{{ makeDynCall("vii", "callback") }}}(shareResult, 0);
             })
             .catch(error => {
                 console.error(error);
-                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
 
-    Wortal_context_updateAsync: function (payload, callback, errorCallback) {
+    Wortal_context_updateAsync: function (payload, callback) {
         window.Wortal.context.updateAsync(Utils.toJson(payload))
             .then(() => {
-                {{{ makeDynCall("v", "callback") }}}();
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
                 console.error(error);
-                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
 
-    Wortal_context_switchAsync: function (contextId, callback, errorCallback) {
+    Wortal_context_switchAsync: function (contextId, callback) {
         window.Wortal.context.switchAsync(Utils.toJson(contextId))
             .then(() => {
-                {{{ makeDynCall("v", "callback") }}}();
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
                 console.error(error);
-                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
 
-    Wortal_context_createAsync: function (playerId, callback, errorCallback) {
+    Wortal_context_createAsync: function (playerId, callback) {
         window.Wortal.context.createAsync(Utils.toJson(playerId))
             .then(() => {
-                {{{ makeDynCall("v", "callback") }}}();
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
                 console.error(error);
-                {{{ makeDynCall("vi", "errorCallback") }}}(Utils.allocateString(JSON.stringify(error)));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
 
