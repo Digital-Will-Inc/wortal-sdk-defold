@@ -372,6 +372,178 @@ static int Wortal_Context_CreateAsync(lua_State* L) {
 	return 0;
 }
 
+//////////////////////////////////////////////////////////////////////
+// In-App Purchasing API
+//////////////////////////////////////////////////////////////////////
+
+lua_Listener onIAPGetCatalogListener;
+lua_Listener onIAPGetPurchasesListener;
+lua_Listener onIAPMakePurchaseListener;
+lua_Listener onIAPConsumePurchaseListener;
+
+static void Wortal_IAP_OnGetCatalog(const char* catalog, const char* error) {
+    lua_State* L = onIAPGetCatalogListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onIAPGetCatalogListener);
+    if (catalog) {
+        lua_pushstring(L, catalog);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_IAP_OnGetPurchases(const char* purchases, const char* error) {
+    lua_State* L = onIAPGetPurchasesListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onIAPGetPurchasesListener);
+    if (purchases) {
+        lua_pushstring(L, purchases);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_IAP_OnMakePurchase(const char* purchase, const char* error) {
+    lua_State* L = onIAPMakePurchaseListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onIAPMakePurchaseListener);
+    if (purchase) {
+        lua_pushstring(L, purchase);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_IAP_OnConsumePurchase(const int success, const char* error) {
+    lua_State* L = onIAPConsumePurchaseListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onIAPConsumePurchaseListener);
+    lua_pushboolean(L, success);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static int Wortal_IAP_IsEnabled(lua_State* L) {
+    int top = lua_gettop(L);
+
+    int enabled = Wortal_iap_isEnabled();
+    lua_pushboolean(L, enabled);
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+static int Wortal_IAP_GetCatalogAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onIAPGetCatalogListener);
+    Wortal_iap_getCatalogAsync((OnGetCatalogCallback)Wortal_IAP_OnGetCatalog);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_IAP_GetPurchasesAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onIAPGetPurchasesListener);
+    Wortal_iap_getPurchasesAsync((OnGetPurchasesCallback)Wortal_IAP_OnGetPurchases);
+
+	assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_IAP_MakePurchaseAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* purchaseConfig = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onIAPMakePurchaseListener);
+    Wortal_iap_makePurchaseAsync(purchaseConfig, (OnMakePurchaseCallback)Wortal_IAP_OnMakePurchase);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_IAP_ConsumePurchaseAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* token = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onIAPConsumePurchaseListener);
+    Wortal_iap_consumePurchaseAsync(token, (OnConsumePurchaseCallback)Wortal_IAP_OnConsumePurchase);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////
+// Leaderbord API
+//////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// Player API
+//////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// Session API
+//////////////////////////////////////////////////////////////////////
+
 // Functions exposed to Lua
 static const luaL_reg Module_methods[] = {
     // Ads API
@@ -394,6 +566,13 @@ static const luaL_reg Module_methods[] = {
     {"context_update", Wortal_Context_UpdateAsync},
     {"context_switch", Wortal_Context_SwitchAsync},
     {"context_create", Wortal_Context_CreateAsync},
+
+    // In-App Purchasing API
+    {"iap_is_enabled", Wortal_IAP_IsEnabled},
+    {"iap_get_catalog", Wortal_IAP_GetCatalogAsync},
+    {"iap_get_purchases", Wortal_IAP_GetPurchasesAsync},
+    {"iap_make_purchase", Wortal_IAP_MakePurchaseAsync},
+    {"iap_consume_purchase", Wortal_IAP_ConsumePurchaseAsync},
 
     {0, 0}
 };

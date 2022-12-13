@@ -27,7 +27,7 @@ var WortalLib = {
         allocateString: function(str) {
             return allocate(intArrayFromString(str), ALLOC_STACK);
         },
-        toJson: function(str) {
+        toObjectFromJsonString: function(str) {
             return JSON.parse(UTF8ToString(str));
         }
     },
@@ -102,7 +102,7 @@ var WortalLib = {
     },
 
     Wortal_context_chooseAsync: function (payload, callback) {
-        window.Wortal.context.chooseAsync(Utils.toJson(payload))
+        window.Wortal.context.chooseAsync(Utils.toObjectFromJsonString(payload))
             .then(() => {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
@@ -113,7 +113,7 @@ var WortalLib = {
     },
 
     Wortal_context_shareAsync: function (payload, callback) {
-        window.Wortal.context.shareAsync(Utils.toJson(payload))
+        window.Wortal.context.shareAsync(Utils.toObjectFromJsonString(payload))
             .then(shareResult => {
                 {{{ makeDynCall("vii", "callback") }}}(shareResult, 0);
             })
@@ -124,7 +124,7 @@ var WortalLib = {
     },
 
     Wortal_context_updateAsync: function (payload, callback) {
-        window.Wortal.context.updateAsync(Utils.toJson(payload))
+        window.Wortal.context.updateAsync(Utils.toObjectFromJsonString(payload))
             .then(() => {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
@@ -135,7 +135,7 @@ var WortalLib = {
     },
 
     Wortal_context_switchAsync: function (contextId, callback) {
-        window.Wortal.context.switchAsync(Utils.toJson(contextId))
+        window.Wortal.context.switchAsync(UTF8ToString(contextId))
             .then(() => {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
@@ -146,7 +146,7 @@ var WortalLib = {
     },
 
     Wortal_context_createAsync: function (playerId, callback) {
-        window.Wortal.context.createAsync(Utils.toJson(playerId))
+        window.Wortal.context.createAsync(UTF8ToString(playerId))
             .then(() => {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
@@ -159,6 +159,54 @@ var WortalLib = {
     //////////////////////////////////////////////////////////////////////
     // In-App Purchases API
     //////////////////////////////////////////////////////////////////////
+
+    Wortal_iap_isEnabled: function () {
+        return window.Wortal.iap.isEnabled() ? 1 : 0;
+    },
+
+    Wortal_iap_getCatalogAsync: function (callback) {
+        window.Wortal.iap.getCatalogAsync()
+            .then(catalog => {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(catalog)), 0);
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_iap_getPurchasesAsync: function (callback) {
+        window.Wortal.iap.getPurchasesAsync()
+            .then(purchases => {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(purchases)), 0);
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_iap_makePurchaseAsync: function (purchaseConfig, callback) {
+        window.Wortal.iap.makePurchaseAsync(Utils.toObjectFromJsonString(purchaseConfig))
+            .then(purchase => {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(purchase)), 0);
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_iap_consumePurchaseAsync: function (token, callback) {
+        window.Wortal.iap.consumePurchaseAsync(UTF8ToString(token))
+            .then(() => {
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
+            })
+            .catch(error => {
+                console.error(error);
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    }
 
     //////////////////////////////////////////////////////////////////////
     // Leaderboard API

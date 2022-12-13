@@ -15,6 +15,10 @@ typedef void (*OnContextCallback)(const int success, const char* error);
 typedef void (*OnContextShareCallback)(const int shareResult, const char* error);
 
 // IAP callbacks
+typedef void (*OnGetCatalogCallback)(const char* catalog, const char* error);
+typedef void (*OnGetPurchasesCallback)(const char* purchases, const char* error);
+typedef void (*OnMakePurchaseCallback)(const char* purchase, const char* error);
+typedef void (*OnConsumePurchaseCallback)(const int success, const char* error);
 
 // Leaderboard callbacks
 
@@ -46,6 +50,13 @@ extern "C" {
     void Wortal_context_updateAsync(const char* payload, OnContextCallback callback);
     void Wortal_context_switchAsync(const char* contextId, OnContextCallback callback);
     void Wortal_context_createAsync(const char* playerId, OnContextCallback callback);
+
+    // In-App Purchasing API
+    int Wortal_iap_isEnabled();
+    void Wortal_iap_getCatalogAsync(OnGetCatalogCallback callback);
+    void Wortal_iap_getPurchasesAsync(OnGetPurchasesCallback callback);
+    void Wortal_iap_makePurchaseAsync(const char* purchaseConfig, OnMakePurchaseCallback callback);
+    void Wortal_iap_consumePurchaseAsync(const char* token, OnConsumePurchaseCallback callback);
 }
 
 #endif
