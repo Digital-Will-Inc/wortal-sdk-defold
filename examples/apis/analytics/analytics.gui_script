@@ -1,0 +1,45 @@
+local dirtylarry = require "gooey.themes.dirtylarry.dirtylarry"
+local monarch = require "monarch.monarch"
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_input(self, action_id, action)
+	dirtylarry.button("back", action_id, action, function()
+		monarch.back()
+	end)
+	
+	dirtylarry.button("levelStart", action_id, action, function()
+		wortal.analytics_log_level_start("Level 3")
+	end)
+
+	dirtylarry.button("levelEnd", action_id, action, function()
+		wortal.analytics_log_level_end("Level 3", "100", 1) -- 1 for true, 0 for false
+	end)
+
+	dirtylarry.button("levelUp", action_id, action, function()
+		wortal.analytics_log_level_up("Level 10")
+	end)
+
+	dirtylarry.button("postScore", action_id, action, function()
+		wortal.analytics_log_score("100")
+	end)
+
+	dirtylarry.button("tutorialStart", action_id, action, function()
+		wortal.analytics_log_tutorial_start("First Play")
+	end)
+
+	dirtylarry.button("tutorialEnd", action_id, action, function()
+		wortal.analytics_log_tutorial_end("First Play", 1) -- 1 for true, 0 for false
+	end)
+
+	dirtylarry.button("gameChoice", action_id, action, function()
+		wortal.analytics_log_game_choice("Character", "Blue")
+	end)
+end
+
+function on_reload(self)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
