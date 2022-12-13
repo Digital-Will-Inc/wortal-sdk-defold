@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdn.html5gameportal.com/wortal-sdk/wortal-core-1.1.2.js"></script>
+    <script src="https://cdn.html5gameportal.com/wortal-sdk/wortal-core-1.2.0.js"></script>
 </head>
 <body>
+<script>
+    if (Progress) {
+        Progress.addListener(val => {
+            if (window.Wortal) {
+                window.Wortal.setLoadingProgress(val);
+            }
+        });
+    }
+</script>
 </body>
 </html>
