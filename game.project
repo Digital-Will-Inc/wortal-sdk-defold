@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /example/example.collectionc
+main_collection = /examples/apis/apis.collectionc
 
 [script]
 shared_state = 1
@@ -8,14 +8,19 @@ shared_state = 1
 title = Wortal SDK for Defold
 publisher = Digital Will Inc.
 developer = Digital Will Inc.
-version = 1.0.0
-dependencies#0 = https://github.com/andsve/dirtylarry/archive/master.zip
+version = 2.0.0
+dependencies#0 = https://github.com/britzl/gooey/archive/6.5.0.zip
+dependencies#1 = https://github.com/britzl/monarch/archive/2.13.0.zip
 
 [library]
-include_dirs = wortal-sdk
+include_dirs = wortal
 
 [html5]
 heap_size = 32
 show_fullscreen_button = 0
 show_made_with_defold = 0
+show_console_banner = 0
+
+[collection_proxy]
+max_count = 10
 

@@ -1,0 +1,71 @@
+local dirtylarry = require "gooey.themes.dirtylarry.dirtylarry"
+local json = require "wortal.utils.json"
+local monarch = require "monarch.monarch"
+
+local function has_context()
+	local context_id = wortal.context_get_id()
+	return context_id
+end
+
+function init(self)
+	print("init")
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	dirtylarry.button("choose_context", action_id, action, function()
+		local payload = {
+			text = "Let's play!",
+			image = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+		}
+		wortal.context_choose(json.encode(payload), function(self, success, error)
+			popup.success_check(success, "Success!", "Error")
+		end)
+	end)
+
+	dirtylarry.button("share_context", action_id, action, function()
+		local payload = {
+			text = "Let's play!",
+			image = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+		}
+		wortal.context_share(json.encode(payload), function(self, shareResult, error)
+			print(shareResult)
+		end)
+	end)
+
+	dirtylarry.button("update_context", action_id, action, function()
+		local payload = {
+			text = "We played!",
+			image = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+		}
+		wortal.context_update(json.encode(payload), function(self, success, error)
+			popup.success_check(success, "Success!", "Error")
+		end)
+	end)
+
+	dirtylarry.button("create_context", action_id, action, function()
+		local player_id = "some.player.id"
+		wortal.context_create(player_id, function(self, success, error)
+			popup.success_check(success, "Success!", "Error")
+		end)
+	end)
+
+	dirtylarry.button("switch_context", action_id, action, function()
+		local context_id = "some.context.id"
+		wortal.context_switch(context_id, function(self, success, error)
+			popup.success_check(success, "Success!", "Error")
+		end)
+	end)
+
+	dirtylarry.button("back", action_id, action, function()
+		monarch.back()
+	end)
+end
+
+function on_reload(self)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end

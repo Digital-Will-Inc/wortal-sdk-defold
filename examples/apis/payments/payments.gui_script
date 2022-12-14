@@ -1,0 +1,57 @@
+local dirtylarry = require "gooey.themes.dirtylarry.dirtylarry"
+local json = require "wortal.utils.json"
+local prettify = require "examples.apis.prettify"
+local monarch = require "monarch.monarch"
+local popup = require "examples.apis.popup.popup"
+
+local token = "none"
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	dirtylarry.button("back", action_id, action, function()
+		monarch.back()
+	end)
+	
+	dirtylarry.button("purchase", action_id, action, function()
+		local product = {
+			productID = "jp.rgames.wortalsdktest.purchase.llama_pack_1.test"
+		}
+		wortal.iap_make_purchase(json.encode(product), function(self, purchase, error)
+			popup.success_check(purchase, prettify(json.decode(purchase)), "Purchase failed")
+			if not error then
+				token = purchase.purchaseToken;
+			end
+		end)
+	end)
+	
+	dirtylarry.button("consume", action_id, action, function()
+		wortal.iap_consume_purchase(token, function(self, success, error)
+			popup.success_check(success, "Consume success", "Consume failed")
+		end)
+	end)
+
+	dirtylarry.button("catalog", action_id, action, function()
+		wortal.iap_get_catalog(function(self, catalog, error)
+			popup.success_check(catalog, prettify(json.decode(catalog)), "Catalog failed")
+		end)
+	end)
+
+	dirtylarry.button("getOwned", action_id, action, function()
+		wortal.iap_get_purchases(function(self, purchases, error)
+			popup.success_check(purchases, prettify(json.decode(purchases)), "Purchases get failed")
+			local items = json.decode(purchases)
+			token = items[1].purchaseToken
+		end)
+	end)
+end
+
+function on_reload(self)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
