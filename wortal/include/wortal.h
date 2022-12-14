@@ -21,12 +21,19 @@ typedef void (*OnMakePurchaseCallback)(const char* purchase, const char* error);
 typedef void (*OnConsumePurchaseCallback)(const int success, const char* error);
 
 // Leaderboard callbacks
+typedef void (*OnGetLeaderboardCallback)(const char* leaderboard, const char* error);
+typedef void (*OnLeaderboardSendEntryCallback)(const char* entry, const char* error);
+typedef void (*OnLeaderboardGetEntriesCallback)(const char* entries, const char* error);
+typedef void (*OnLeaderboardGetPlayerEntryCallback)(const char* entry, const char* error);
+typedef void (*OnLeaderboardGetEntryCountCallback)(const int count, const char* error);
+typedef void (*OnLeaderboardGetConnectedPlayersEntriesCallback)(const char* entries, const char* error);
 
 // Player callbacks
 
 // Session callbacks
 
 extern "C" {
+
     // Ads API
     void Wortal_ads_showInterstitial(const char* type, const char* description, OnBeforeAdCallback beforeAdCallback,
     OnAfterAdCallback afterAdCallback);
@@ -57,6 +64,18 @@ extern "C" {
     void Wortal_iap_getPurchasesAsync(OnGetPurchasesCallback callback);
     void Wortal_iap_makePurchaseAsync(const char* purchaseConfig, OnMakePurchaseCallback callback);
     void Wortal_iap_consumePurchaseAsync(const char* token, OnConsumePurchaseCallback callback);
+
+    // Leaderboard API
+    void Wortal_leaderboard_getLeaderboardAsync(const char* leaderboard, OnGetLeaderboardCallback callback);
+    void Wortal_leaderboard_sendEntryAsync(const char* leaderboard, const int score, const char* details, OnLeaderboardSendEntryCallback callback);
+    void Wortal_leaderboard_getEntriesAsync(const char* leaderboard, const int count, const int offset, OnLeaderboardGetEntriesCallback callback);
+    void Wortal_leaderboard_getPlayerEntryAsync(const char* leaderboard, OnLeaderboardGetPlayerEntryCallback callback);
+    void Wortal_leaderboard_getEntryCountAsync(const char* leaderboard, OnLeaderboardGetEntryCountCallback callback);
+    void Wortal_leaderboard_getConnectedPlayersEntriesAsync(const char* leaderboard, const int count, const int offset, OnLeaderboardGetConnectedPlayersEntriesCallback callback);
+
+    // Player API
+
+    // Session API
 }
 
 #endif

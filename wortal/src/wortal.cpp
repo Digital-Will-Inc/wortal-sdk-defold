@@ -533,8 +533,256 @@ static int Wortal_IAP_ConsumePurchaseAsync(lua_State* L) {
 }
 
 //////////////////////////////////////////////////////////////////////
-// Leaderbord API
+// Leaderboard API
 //////////////////////////////////////////////////////////////////////
+
+lua_Listener onLeaderboardGetLeaderboardListener;
+lua_Listener onLeaderboardSendEntryListener;
+lua_Listener onLeaderboardGetEntriesListener;
+lua_Listener onLeaderboardGetPlayerEntryListener;
+lua_Listener onLeaderboardGetEntryCountListener;
+lua_Listener onLeaderboardGetConnectedPlayersEntriesListener;
+
+static void Wortal_Leaderboard_OnGetLeaderboard(const char* leaderboard, const char* error) {
+    lua_State* L = onLeaderboardGetLeaderboardListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onLeaderboardGetLeaderboardListener);
+    if (leaderboard) {
+        lua_pushstring(L, leaderboard);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Leaderboard_OnSendEntry(const char* entry, const char* error) {
+    lua_State* L = onLeaderboardSendEntryListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onLeaderboardSendEntryListener);
+    if (entry) {
+        lua_pushstring(L, entry);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Leaderboard_OnGetEntries(const char* entries, const char* error) {
+    lua_State* L = onLeaderboardGetEntriesListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onLeaderboardGetEntriesListener);
+    if (entries) {
+        lua_pushstring(L, entries);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Leaderboard_OnGetPlayerEntry(const char* entry, const char* error) {
+    lua_State* L = onLeaderboardGetPlayerEntryListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onLeaderboardGetPlayerEntryListener);
+    if (entry) {
+        lua_pushstring(L, entry);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Leaderboard_OnGetEntryCount(const int count, const char* error) {
+    lua_State* L = onLeaderboardGetEntryCountListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onLeaderboardGetEntryCountListener);
+    lua_pushnumber(L, count);
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Leaderboard_OnGetConnectedPlayersEntries(const char* entries, const char* error) {
+    lua_State* L = onLeaderboardGetConnectedPlayersEntriesListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onLeaderboardGetConnectedPlayersEntriesListener);
+    if (entries) {
+        lua_pushstring(L, entries);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static int Wortal_Leaderboard_GetLeaderboardAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* leaderboard = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onLeaderboardGetLeaderboardListener);
+    Wortal_leaderboard_getLeaderboardAsync(leaderboard, (OnGetLeaderboardCallback)Wortal_Leaderboard_OnGetLeaderboard);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_Leaderboard_SendEntryAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* leaderboard = luaL_checkstring(L, 1);
+    const int score = luaL_checknumber(L, 2);
+    const char* details;
+    if (lua_isstring(L, 3)) {
+        details = luaL_checkstring(L, 3);
+    }
+    else {
+        details = "";
+    }
+    luaL_checklistener(L, 4, onLeaderboardSendEntryListener);
+    Wortal_leaderboard_sendEntryAsync(leaderboard, score, details, (OnLeaderboardSendEntryCallback)Wortal_Leaderboard_OnSendEntry);
+
+	assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_Leaderboard_GetEntriesAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* leaderboard = luaL_checkstring(L, 1);
+    const int count = luaL_checknumber(L, 2);
+    int offset;
+    if (lua_isnumber(L, 3)) {
+        offset = luaL_checknumber(L, 3);
+    }
+    else {
+        offset = 0;
+    }
+    luaL_checklistener(L, 4, onLeaderboardGetEntriesListener);
+    Wortal_leaderboard_getEntriesAsync(leaderboard, count, offset, (OnLeaderboardGetEntriesCallback)Wortal_Leaderboard_OnGetEntries);
+
+	assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_Leaderboard_GetPlayerEntryAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* leaderboard = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onLeaderboardGetPlayerEntryListener);
+    Wortal_leaderboard_getPlayerEntryAsync(leaderboard, (OnLeaderboardGetPlayerEntryCallback)Wortal_Leaderboard_OnGetPlayerEntry);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_Leaderboard_GetEntryCountAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* leaderboard = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onLeaderboardGetEntryCountListener);
+    Wortal_leaderboard_getEntryCountAsync(leaderboard, (OnLeaderboardGetEntryCountCallback)Wortal_Leaderboard_OnGetEntryCount);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
+static int Wortal_Leaderboard_GetConnectedPlayersEntriesAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* leaderboard = luaL_checkstring(L, 1);
+    const int count = luaL_checknumber(L, 2);
+    int offset;
+    if (lua_isnumber(L, 3)) {
+        offset = luaL_checknumber(L, 3);
+    }
+    else {
+        offset = 0;
+    }
+    luaL_checklistener(L, 4, onLeaderboardGetConnectedPlayersEntriesListener);
+    Wortal_leaderboard_getConnectedPlayersEntriesAsync(leaderboard, count, offset, (OnLeaderboardGetConnectedPlayersEntriesCallback)Wortal_Leaderboard_OnGetConnectedPlayersEntries);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Player API
@@ -546,6 +794,7 @@ static int Wortal_IAP_ConsumePurchaseAsync(lua_State* L) {
 
 // Functions exposed to Lua
 static const luaL_reg Module_methods[] = {
+
     // Ads API
     {"ads_show_interstitial", Wortal_Ads_ShowInterstitial},
     {"ads_show_rewarded", Wortal_Ads_ShowRewarded},
@@ -573,6 +822,18 @@ static const luaL_reg Module_methods[] = {
     {"iap_get_purchases", Wortal_IAP_GetPurchasesAsync},
     {"iap_make_purchase", Wortal_IAP_MakePurchaseAsync},
     {"iap_consume_purchase", Wortal_IAP_ConsumePurchaseAsync},
+
+    // Leaderboard API
+    {"leaderboard_get_leaderboard", Wortal_Leaderboard_GetLeaderboardAsync},
+    {"leaderboard_send_entry", Wortal_Leaderboard_SendEntryAsync},
+    {"leaderboard_get_entries", Wortal_Leaderboard_GetEntriesAsync},
+    {"leaderboard_get_player_entry", Wortal_Leaderboard_GetPlayerEntryAsync},
+    {"leaderboard_get_entry_count", Wortal_Leaderboard_GetEntryCountAsync},
+    {"leaderboard_get_connected_players_entries", Wortal_Leaderboard_GetConnectedPlayersEntriesAsync},
+
+    // Player API
+
+    // Session API
 
     {0, 0}
 };
