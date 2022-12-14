@@ -13,7 +13,7 @@ Add [Wortal SDK](https://github.com/Digital-Will-Inc/wortal-sdk-defold/archive/m
 Interstitial ads can be shown at various points in the game such as a level end, restart or a timed
 interval in games with longer levels.
 
-```typescript
+```lua
 // Player reached the next level.
 wortal.ads_show_interstitial("next", "NextLevel", pause_game, resume_game)
 
@@ -27,7 +27,7 @@ wortal.ads_show_interstitial("browse", "BrowseShop", pause_audio, resume_audio)
 Rewarded ads can be shown too. These are longer, optional ads that the player can earn a reward for watching. The player
 must be notified of the ad and give permission to show before it can be shown.
 
-```typescript
+```lua
 // This example shows the game flow independent of the outcome of the ad.
 wortal.ads_show_rewarded("BonusCoins", pause_game, resume_game, skip_bonus, add_bonus_coins)
 
@@ -44,7 +44,7 @@ wortal.ads_show_rewarded("ReviveAndContinue", pause_audio, resume_audio, end_gam
 The Analytics API can be used to track game events that can help better understand how players are interacting with
 the game. This data will be available for viewing in the Wortal dashboard.
 
-```typescript
+```lua
 // Logs the start of the level.
 wortal.analytics_log_level_start("Level 3")
 
@@ -64,7 +64,7 @@ wortal.analytics_log_game_choice("Character", "Blue")
 The Context API is used to connect players and allow them to interact in the game session, share their content
 and send messages to each other.
 
-```typescript
+```lua
 // Invite a friend to play the game.
 local payload = {
     image = 'data:base64image',
@@ -97,7 +97,7 @@ end)
 The In-App Purchases (IAP) API is used to provide an interface for in-game transactions on the platforms.
 This process will differ based on what platform the game is being played on, but the API remains the same.
 
-```typescript
+```lua
 // Get the catalog of products the player can purchase.
 wortal.iap_get_catalog(function(self, catalog, error)
     popup.success_check(catalog, prettify(json.decode(catalog)), "Catalog failed")
@@ -120,7 +120,7 @@ end)
 The Leaderboard API gives the game access to the platform's leaderboard functionality. This is where
 you can track player's scores and compare them to other players.
 
-```typescript
+```lua
 // Get the top 10 entries on the global leaderboard.
 wortal.leaderboard_get_entries("global", 10, 0, function(self, entries, error)
     popup.success_check(entries, prettify(json.decode(entries)), "Leaderboard get entries failed")
@@ -138,7 +138,7 @@ end)
 
 You can find details about the current player via the Player API.
 
-```typescript
+```lua
 // Get the player's name.
 local name = wortal.player_get_name()
 
@@ -160,7 +160,7 @@ end)
 
 Details about the current session can be accessed in the Session API.
 
-```typescript
+```lua
 // Get the entry point of where the game started from.
 wortal.session_get_entry_point(function(self, entryPoint, error)
     popup.success_check(entryPoint, entryPoint, "Error")
