@@ -1004,6 +1004,99 @@ static int Wortal_Player_GetSignedPlayerInfoAsync(lua_State* L) {
 // Session API
 //////////////////////////////////////////////////////////////////////
 
+lua_Listener onSessionGetEntryPointListener;
+
+static void Wortal_Session_OnGetEntryPoint(const char* entryPoint, const char* error) {
+    lua_State* L = onSessionGetEntryPointListener.m_L;
+	int top = lua_gettop(L);
+
+    lua_pushlistener(L, onSessionGetEntryPointListener);
+    if (entryPoint) {
+        lua_pushstring(L, entryPoint);
+    }
+    else {
+        lua_pushnil(L);
+    }
+	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static int Wortal_Session_GetEntryPointData(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getEntryPointData();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+static int Wortal_Session_GetLocale(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getLocale();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+static int Wortal_Session_GetTrafficSource(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getTrafficSource();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+static int Wortal_Session_SetSessionData(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = luaL_checkstring(L, 1);
+    Wortal_session_setSessionData(data);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+static int Wortal_Session_GetEntryPointAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onSessionGetEntryPointListener);
+    Wortal_session_getEntryPointAsync((OnGetEntryPointCallback)Wortal_Session_OnGetEntryPoint);
+
+    assert(top == lua_gettop(L));
+	return 0;
+}
+
 // Functions exposed to Lua
 static const luaL_reg Module_methods[] = {
 
@@ -1054,6 +1147,11 @@ static const luaL_reg Module_methods[] = {
     {"player_get_signed_info", Wortal_Player_GetSignedPlayerInfoAsync},
 
     // Session API
+    {"session_get_entry_point_data", Wortal_Session_GetEntryPointData},
+    {"session_get_locale", Wortal_Session_GetLocale},
+    {"session_get_traffic_source", Wortal_Session_GetTrafficSource},
+    {"session_set_session_data", Wortal_Session_SetSessionData},
+    {"session_get_entry_point", Wortal_Session_GetEntryPointAsync},
 
     {0, 0}
 };

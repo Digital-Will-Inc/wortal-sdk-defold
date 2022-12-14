@@ -107,7 +107,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -118,7 +117,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(shareResult, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -129,7 +127,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -140,7 +137,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -151,7 +147,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -170,7 +165,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(catalog)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -181,7 +175,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(purchases)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -192,7 +185,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(purchase)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -203,7 +195,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -218,7 +209,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(leaderboard)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -229,7 +219,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entry)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -240,7 +229,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entries)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -251,7 +239,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entry)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -262,7 +249,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(count, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -273,7 +259,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entries)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -304,7 +289,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(data)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -315,7 +299,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -326,7 +309,6 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(players)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
     },
@@ -337,14 +319,39 @@ var WortalLib = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(info)), 0);
             })
             .catch(error => {
-                console.error(error);
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
-    }
+    },
 
     //////////////////////////////////////////////////////////////////////
     // Session API
     //////////////////////////////////////////////////////////////////////
+
+    Wortal_session_getEntryPointData: function () {
+        return Utils.allocateString(JSON.stringify(window.Wortal.session.getEntryPointData()));
+    },
+
+    Wortal_session_getLocale: function () {
+        return Utils.allocateString(window.Wortal.session.getLocale());
+    },
+
+    Wortal_session_getTrafficSource: function () {
+        return Utils.allocateString(JSON.stringify(window.Wortal.session.getTrafficSource()));
+    },
+
+    Wortal_session_setSessionData: function (data) {
+        window.Wortal.session.setSessionData(Utils.toObjectFromJsonString(data));
+    },
+
+    Wortal_session_getEntryPointAsync: function (callback) {
+        window.Wortal.session.getEntryPointAsync()
+            .then(entryPoint =>  {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(entryPoint), 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    }
 }
 
 autoAddDeps(WortalLib, '$Ads');

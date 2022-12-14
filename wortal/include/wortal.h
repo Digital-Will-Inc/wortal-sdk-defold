@@ -35,6 +35,7 @@ typedef void (*OnGetConnectedPlayersCallback)(const char* players, const char* e
 typedef void (*OnGetSignedPlayerInfoCallback)(const char* info, const char* error);
 
 // Session callbacks
+typedef void (*OnGetEntryPointCallback)(const char* data, const char* error);
 
 extern "C" {
 
@@ -88,6 +89,11 @@ extern "C" {
     void Wortal_player_getSignedPlayerInfoAsync(OnGetSignedPlayerInfoCallback callback);
 
     // Session API
+    char* Wortal_session_getEntryPointData();
+    char* Wortal_session_getLocale();
+    char* Wortal_session_getTrafficSource();
+    void Wortal_session_setSessionData(const char* data);
+    void Wortal_session_getEntryPointAsync(OnGetEntryPointCallback callback);
 }
 
 #endif

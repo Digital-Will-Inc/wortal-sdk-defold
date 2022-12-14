@@ -21,3 +21,6 @@ show_fullscreen_button = 0
 show_made_with_defold = 0
 show_console_banner = 0
 
+[collection_proxy]
+max_count = 10
+
