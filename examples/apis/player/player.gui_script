@@ -1,0 +1,69 @@
+local dirtylarry = require "gooey.themes.dirtylarry.dirtylarry"
+local json = require "wortal.utils.json"
+local prettify = require "examples.apis.prettify"
+local monarch = require "monarch.monarch"
+local popup = require "examples.apis.popup.popup"
+
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	dirtylarry.button("back", action_id, action, function()
+		monarch.back()
+	end)
+
+	dirtylarry.button("get_id", action_id, action, function()
+		local id = wortal.player_get_id()
+		popup.success_check(id, id, "Get ID failed")
+	end)
+
+	dirtylarry.button("get_name", action_id, action, function()
+		local name = wortal.player_get_name()
+		popup.success_check(name, name, "Get Name failed")
+	end)
+
+	dirtylarry.button("get_data", action_id, action, function()
+		local keys = { "items", "lives" }
+		wortal.player_get_data(json.encode(keys), function(self, data, error)
+			popup.success_check(data, prettify(json.decode(data)), "Error")
+		end)
+	end)
+
+	dirtylarry.button("set_data", action_id, action, function()
+		local data = {
+			items =  {
+				coins = 100,
+				boosters = 2
+			},
+			lives = 3,
+		}
+		wortal.player_set_data(json.encode(data), function(self, success, error)
+			popup.success_check(success, "Success!", "Error")
+		end)
+	end)
+
+	dirtylarry.button("friends", action_id, action, function()
+		local payload = {
+			size = 20,
+		}
+		wortal.player_get_connected_players(json.encode(payload), function(self, players, error)
+			popup.success_check(players, prettify(json.decode(players)), "Error")
+		end)
+	end)
+	
+	dirtylarry.button("signed", action_id, action, function()
+		wortal.player_get_signed_info(function(self, info, error)
+			popup.success_check(info, prettify(json.decode(info)), "Error")
+		end)
+	end)
+end
+
+function on_reload(self)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end

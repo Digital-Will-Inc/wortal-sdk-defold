@@ -29,6 +29,10 @@ typedef void (*OnLeaderboardGetEntryCountCallback)(const int count, const char* 
 typedef void (*OnLeaderboardGetConnectedPlayersEntriesCallback)(const char* entries, const char* error);
 
 // Player callbacks
+typedef void (*OnPlayerGetDataCallback)(const char* data, const char* error);
+typedef void (*OnPlayerSetDataCallback)(const int success, const char* error);
+typedef void (*OnGetConnectedPlayersCallback)(const char* players, const char* error);
+typedef void (*OnGetSignedPlayerInfoCallback)(const char* info, const char* error);
 
 // Session callbacks
 
@@ -74,6 +78,14 @@ extern "C" {
     void Wortal_leaderboard_getConnectedPlayersEntriesAsync(const char* leaderboard, const int count, const int offset, OnLeaderboardGetConnectedPlayersEntriesCallback callback);
 
     // Player API
+    char* Wortal_player_getID();
+    char* Wortal_player_getName();
+    char* Wortal_player_getPhoto();
+    int Wortal_player_isFirstPlay();
+    void Wortal_player_getDataAsync(const char* keys, OnPlayerGetDataCallback callback);
+    void Wortal_player_setDataAsync(const char* data, OnPlayerSetDataCallback callback);
+    void Wortal_player_getConnectedPlayersAsync(const char* payload, OnGetConnectedPlayersCallback callback);
+    void Wortal_player_getSignedPlayerInfoAsync(OnGetSignedPlayerInfoCallback callback);
 
     // Session API
 }
