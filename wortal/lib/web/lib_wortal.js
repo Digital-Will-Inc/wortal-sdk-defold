@@ -24,12 +24,29 @@ var WortalLib = {
     },
 
     $Utils: {
+        _onPauseCallbackPtr: null,
+
+        onPauseCallback: function () {
+            {{{ makeDynCall("vi", "Utils._onPauseCallbackPtr") }}}(1);
+        },
+
         allocateString: function(str) {
             return allocate(intArrayFromString(str), ALLOC_STACK);
         },
+
         toObjectFromJsonString: function(str) {
             return JSON.parse(UTF8ToString(str));
         }
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // SDK API
+    //////////////////////////////////////////////////////////////////////
+
+    Wortal_onPause: function (callback) {
+        Utils._onPauseCallbackPtr = callback;
+
+        window.Wortal.onPause(() => Utils.onPauseCallback);
     },
 
     //////////////////////////////////////////////////////////////////////

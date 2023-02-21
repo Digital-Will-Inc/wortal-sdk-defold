@@ -4,6 +4,9 @@
 
 #if defined(DM_PLATFORM_HTML5)
 
+// SDK callbacks
+typedef void (*OnPauseCallback)(const int success);
+
 // Ads callbacks
 typedef void (*OnBeforeAdCallback)(const int success);
 typedef void (*OnAfterAdCallback)(const int success);
@@ -38,6 +41,9 @@ typedef void (*OnGetSignedPlayerInfoCallback)(const char* info, const char* erro
 typedef void (*OnGetEntryPointCallback)(const char* data, const char* error);
 
 extern "C" {
+
+    // SDK API
+    void Wortal_onPause(OnPauseCallback callback);
 
     // Ads API
     void Wortal_ads_showInterstitial(const char* type, const char* description, OnBeforeAdCallback beforeAdCallback,
