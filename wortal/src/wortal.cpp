@@ -5,9 +5,41 @@
 #define EXTENSION_NAME Wortal
 #define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
-#define VERSION "2.0.0"
+#define VERSION "2.1.0"
 
 #if defined(DM_PLATFORM_HTML5)
+
+//////////////////////////////////////////////////////////////////////
+// SDK API
+//////////////////////////////////////////////////////////////////////
+
+lua_Listener onPauseListener;
+
+static void Wortal_OnPause(const int success) {
+    lua_State* L = onPauseListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onPauseListener);
+    lua_pushboolean(L, success);
+
+    int ret = lua_pcall(L, 2, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static int Wortal_SetPauseCallback(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onPauseListener);
+
+    Wortal_onPause((OnPauseCallback)Wortal_OnPause);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Ads API
@@ -1099,6 +1131,9 @@ static int Wortal_Session_GetEntryPointAsync(lua_State* L) {
 
 // Functions exposed to Lua
 static const luaL_reg Module_methods[] = {
+
+    // SDK API
+    {"on_pause", Wortal_SetPauseCallback},
 
     // Ads API
     {"ads_show_interstitial", Wortal_Ads_ShowInterstitial},
