@@ -5,6 +5,7 @@ var WortalLib = {
         _afterAdCallbackPtr: null,
         _adDismissedCallbackPtr: null,
         _adViewedCallbackPtr: null,
+        _noFillCallbackPtr: null,
 
         beforeAdCallback: function () {
             {{{ makeDynCall("vi", "Ads._beforeAdCallbackPtr") }}}(1);
@@ -21,6 +22,10 @@ var WortalLib = {
         adViewedCallback: function () {
             {{{ makeDynCall("vi", "Ads._adViewedCallbackPtr") }}}(1);
         },
+
+        noFillCallback: function () {
+            {{{ makeDynCall("vi", "Ads._noFillCallbackPtr") }}}(1);
+        }
     },
 
     $Utils: {
@@ -53,22 +58,25 @@ var WortalLib = {
     // Ads API
     //////////////////////////////////////////////////////////////////////
 
-    Wortal_ads_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback) {
+    Wortal_ads_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback, noFillCallback) {
         Ads._beforeAdCallbackPtr = beforeAdCallback;
         Ads._afterAdCallbackPtr = afterAdCallback;
+        Ads._noFillCallbackPtr = noFillCallback;
 
         window.Wortal.ads.showInterstitial(UTF8ToString(placement), UTF8ToString(description),
-            Ads.beforeAdCallback, Ads.afterAdCallback);
+            Ads.beforeAdCallback, Ads.afterAdCallback, Ads.noFillCallback);
     },
 
-    Wortal_ads_showRewarded: function (description, beforeAdCallback, afterAdCallback, adDismissedCallback, adViewedCallback) {
+    Wortal_ads_showRewarded: function (description, beforeAdCallback, afterAdCallback, adDismissedCallback,
+                                       adViewedCallback, noFillCallback) {
         Ads._beforeAdCallbackPtr = beforeAdCallback;
         Ads._afterAdCallbackPtr = afterAdCallback;
         Ads._adDismissedCallbackPtr = adDismissedCallback;
         Ads._adViewedCallbackPtr = adViewedCallback;
+        Ads._noFillCallbackPtr = noFillCallback;
 
         window.Wortal.ads.showRewarded(UTF8ToString(description), Ads.beforeAdCallback, Ads.afterAdCallback,
-            Ads.adDismissedCallback, Ads.adViewedCallback);
+            Ads.adDismissedCallback, Ads.adViewedCallback, Ads.noFillCallback);
     },
 
     //////////////////////////////////////////////////////////////////////
@@ -118,6 +126,25 @@ var WortalLib = {
         }
     },
 
+    Wortal_context_getType: function () {
+        const cType = window.Wortal.context.getType();
+        if (cType) {
+            return Utils.allocateString(cType);
+        } else {
+            return null;
+        }
+    },
+
+    Wortal_context_getPlayersAsync: function (callback) {
+        window.Wortal.context.getPlayersAsync()
+            .then(players =>  {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(players)), 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
     Wortal_context_chooseAsync: function (payload, callback) {
         window.Wortal.context.chooseAsync(Utils.toObjectFromJsonString(payload))
             .then(() => {
@@ -132,6 +159,16 @@ var WortalLib = {
         window.Wortal.context.shareAsync(Utils.toObjectFromJsonString(payload))
             .then(shareResult => {
                 {{{ makeDynCall("vii", "callback") }}}(shareResult, 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_context_shareLinkAsync: function (payload, callback) {
+        window.Wortal.context.shareLinkAsync(Utils.toObjectFromJsonString(payload))
+            .then(() => {
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
@@ -166,6 +203,15 @@ var WortalLib = {
             .catch(error => {
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
+    },
+
+    Wortal_context_isSizeBetween: function (minSize, maxSize) {
+        const result = window.Wortal.context.isSizeBetween(minSize, maxSize);
+        if (result) {
+            return Utils.allocateString(result);
+        } else {
+            return null;
+        }
     },
 
     //////////////////////////////////////////////////////////////////////
@@ -320,6 +366,16 @@ var WortalLib = {
             });
     },
 
+    Wortal_player_flushDataAsync: function (callback) {
+        window.Wortal.player.flushDataAsync()
+            .then(() =>  {
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
     Wortal_player_getConnectedPlayersAsync: function (payload, callback) {
         window.Wortal.player.getConnectedPlayersAsync(Utils.toObjectFromJsonString(payload))
             .then(players =>  {
@@ -334,6 +390,46 @@ var WortalLib = {
         window.Wortal.player.getSignedPlayerInfoAsync()
             .then(info =>  {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(info)), 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_player_getASIDAsync: function (callback) {
+        window.Wortal.player.getASIDAsync()
+            .then(asid =>  {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(asid), 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_player_getSignedASIDAsync: function (callback) {
+        window.Wortal.player.getSignedASIDAsync()
+            .then(asid =>  {
+                {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(asid), 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_player_canSubscribeBotAsync: function (callback) {
+        window.Wortal.player.canSubscribeBotAsync()
+            .then(canSubscribe =>  {
+                {{{ makeDynCall("vii", "callback") }}}(canSubscribe ? 1 : 0, 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+            });
+    },
+
+    Wortal_player_subscribeBotAsync: function (callback) {
+        window.Wortal.player.subscribeBotAsync()
+            .then(() =>  {
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
@@ -368,6 +464,10 @@ var WortalLib = {
             .catch(error => {
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
             });
+    },
+
+    Wortal_session_getPlatform: function () {
+        return Utils.allocateString(window.Wortal.session.getPlatform());
     }
 }
 

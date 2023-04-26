@@ -5,7 +5,7 @@
 #define EXTENSION_NAME Wortal
 #define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
-#define VERSION "2.1.0"
+#define VERSION "2.2.0"
 
 #if defined(DM_PLATFORM_HTML5)
 
@@ -49,6 +49,7 @@ lua_Listener onBeforeAdListener;
 lua_Listener onAfterAdListener;
 lua_Listener onAdDismissedListener;
 lua_Listener onAdViewedListener;
+lua_Listener onNoFillListener;
 
 static void Wortal_Ads_OnBeforeAd(const int success) {
     lua_State* L = onBeforeAdListener.m_L;
@@ -110,6 +111,21 @@ static void Wortal_Ads_OnAdViewed(const int success) {
     assert(top == lua_gettop(L));
 }
 
+static void Wortal_Ads_OnNoFill(const int success) {
+    lua_State* L = onNoFillListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onNoFillListener);
+    lua_pushboolean(L, success);
+
+    int ret = lua_pcall(L, 2, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
 static int Wortal_Ads_ShowInterstitial(lua_State* L) {
     int top = lua_gettop(L);
 
@@ -117,9 +133,10 @@ static int Wortal_Ads_ShowInterstitial(lua_State* L) {
     const char* description = luaL_checkstring(L, 2);
     luaL_checklistener(L, 3, onBeforeAdListener);
     luaL_checklistener(L, 4, onAfterAdListener);
+    luaL_checklistener(L, 5, onNoFillListener);
 
-    Wortal_ads_showInterstitial(type,description, (OnBeforeAdCallback)Wortal_Ads_OnBeforeAd,
-                                (OnAfterAdCallback)Wortal_Ads_OnAfterAd);
+    Wortal_ads_showInterstitial(type, description, (OnBeforeAdCallback)Wortal_Ads_OnBeforeAd,
+                                (OnAfterAdCallback)Wortal_Ads_OnAfterAd, (OnNoFillCallback)Wortal_Ads_OnNoFill);
 
     assert(top == lua_gettop(L));
     return 0;
@@ -133,9 +150,10 @@ static int Wortal_Ads_ShowRewarded(lua_State* L) {
     luaL_checklistener(L, 3, onAfterAdListener);
     luaL_checklistener(L, 4, onAdDismissedListener);
     luaL_checklistener(L, 5, onAdViewedListener);
+    luaL_checklistener(L, 6, onNoFillListener);
 
     Wortal_ads_showRewarded(description, (OnBeforeAdCallback)Wortal_Ads_OnBeforeAd, (OnAfterAdCallback)Wortal_Ads_OnAfterAd,
-        (OnAdDismissedCallback)Wortal_Ads_OnAdDismissed, (OnAdViewedCallback)Wortal_Ads_OnAdViewed);
+        (OnAdDismissedCallback)Wortal_Ads_OnAdDismissed, (OnAdViewedCallback)Wortal_Ads_OnAdViewed, (OnNoFillCallback)Wortal_Ads_OnNoFill);
 
     assert(top == lua_gettop(L));
     return 0;
@@ -223,11 +241,40 @@ static int Wortal_Analytics_LogGameChoice(lua_State* L) {
 // Context API
 //////////////////////////////////////////////////////////////////////
 
+lua_Listener onContextGetPlayersListener;
 lua_Listener onContextChooseListener;
 lua_Listener onContextShareListener;
+lua_Listener onContextShareLinkListener;
 lua_Listener onContextUpdateListener;
 lua_Listener onContextSwitchListener;
 lua_Listener onContextCreateListener;
+
+static void Wortal_Context_OnGetPlayers(const char* players, const char* error)
+{
+    lua_State* L = onContextGetPlayersListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onContextGetPlayersListener);
+    if (players) {
+        lua_pushstring(L, players);
+    }
+    else {
+        lua_pushnil(L);
+    }
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
 
 static void Wortal_Context_OnContextChoose(const int success, const char* error) {
     lua_State* L = onContextChooseListener.m_L;
@@ -269,6 +316,27 @@ static void Wortal_Context_OnContextShare(const int shareResult, const char* err
 	}
 
 	assert(top == lua_gettop(L));
+}
+
+static void Wortal_Context_OnContextShareLink(const int success, const char* error) {
+    lua_State* L = onContextShareLinkListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onContextShareLinkListener);
+    lua_pushboolean(L, success);
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
 }
 
 static void Wortal_Context_OnContextUpdate(const int success, const char* error) {
@@ -349,6 +417,31 @@ static int Wortal_Context_GetID(lua_State* L) {
     return 1;
 }
 
+static int Wortal_Context_GetType(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_context_getType();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+static int Wortal_Context_GetPlayersAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onContextGetPlayersListener);
+    Wortal_context_getPlayersAsync((OnContextGetPlayersCallback)Wortal_Context_OnGetPlayers);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
 static int Wortal_Context_ChooseAsync(lua_State* L) {
     int top = lua_gettop(L);
 
@@ -369,6 +462,17 @@ static int Wortal_Context_ShareAsync(lua_State* L) {
 
 	assert(top == lua_gettop(L));
 	return 0;
+}
+
+static int Wortal_Context_ShareLinkAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* payload = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onContextShareLinkListener);
+    Wortal_context_shareAsync(payload, (OnContextShareCallback)Wortal_Context_OnContextShareLink);
+
+    assert(top == lua_gettop(L));
+    return 0;
 }
 
 static int Wortal_Context_UpdateAsync(lua_State* L) {
@@ -402,6 +506,24 @@ static int Wortal_Context_CreateAsync(lua_State* L) {
 
 	assert(top == lua_gettop(L));
 	return 0;
+}
+
+static int Wortal_Context_IsSizeBetween(lua_State* L) {
+    int top = lua_gettop(L);
+
+    int min = luaL_checknumber(L, 1);
+    int max = luaL_checknumber(L, 2);
+
+    const char* data = Wortal_context_isSizeBetween(min, max);
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -825,8 +947,13 @@ static int Wortal_Leaderboard_GetConnectedPlayersEntriesAsync(lua_State* L) {
 
 lua_Listener onPlayerGetDataListener;
 lua_Listener onPlayerSetDataListener;
+lua_Listener onPlayerFlushDataListener;
 lua_Listener onPlayerGetConnectedPlayersListener;
 lua_Listener onPlayerGetSignedInfoListener;
+lua_Listener onPlayerGetASIDListener;
+lua_Listener onPlayerGetSignedASIDListener;
+lua_Listener onPlayerCanSubscribeBotListener;
+lua_Listener onPlayerSubscribeBotListener;
 
 static void Wortal_Player_OnGetData(const char* data, const char* error) {
     lua_State* L = onPlayerGetDataListener.m_L;
@@ -861,6 +988,27 @@ static void Wortal_Player_OnSetData(const int success, const char* error) {
     lua_pushlistener(L, onPlayerSetDataListener);
     lua_pushboolean(L, success);
 	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Player_OnFlushData(const int success, const char* error) {
+    lua_State* L = onPlayerFlushDataListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onPlayerFlushDataListener);
+    lua_pushboolean(L, success);
+    if (error) {
         lua_pushstring(L, error);
     }
     else {
@@ -913,6 +1061,100 @@ static void Wortal_Player_OnGetSignedPlayerInfo(const char* info, const char* er
         lua_pushnil(L);
     }
 	if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Player_OnGetASID(const char* asid, const char* error) {
+    lua_State* L = onPlayerGetASIDListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onPlayerGetASIDListener);
+    if (asid) {
+        lua_pushstring(L, asid);
+    }
+    else {
+        lua_pushnil(L);
+    }
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Player_OnGetSignedASID(const char* asid, const char* error) {
+    lua_State* L = onPlayerGetSignedASIDListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onPlayerGetSignedASIDListener);
+    if (asid) {
+        lua_pushstring(L, asid);
+    }
+    else {
+        lua_pushnil(L);
+    }
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Player_OnCanSubscribeBot(const int canSubscribe, const char* error) {
+    lua_State* L = onPlayerCanSubscribeBotListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onPlayerCanSubscribeBotListener);
+    lua_pushboolean(L, canSubscribe);
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+static void Wortal_Player_OnSubscribeBot(const int success, const char* error) {
+    lua_State* L = onPlayerSubscribeBotListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onPlayerSubscribeBotListener);
+    lua_pushboolean(L, success);
+    if (error) {
         lua_pushstring(L, error);
     }
     else {
@@ -1004,6 +1246,16 @@ static int Wortal_Player_SetDataAsync(lua_State* L) {
 	return 0;
 }
 
+static int Wortal_Player_FlushDataAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onPlayerFlushDataListener);
+    Wortal_player_flushDataAsync((OnPlayerFlushDataCallback)Wortal_Player_OnFlushData);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
 static int Wortal_Player_GetConnectedPlayersAsync(lua_State* L) {
     int top = lua_gettop(L);
 
@@ -1030,6 +1282,46 @@ static int Wortal_Player_GetSignedPlayerInfoAsync(lua_State* L) {
 
     assert(top == lua_gettop(L));
 	return 0;
+}
+
+static int Wortal_Player_GetASIDAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onPlayerGetASIDListener);
+    Wortal_player_getASIDAsync((OnGetASIDCallback)Wortal_Player_OnGetASID);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+static int Wortal_Player_GetSignedASIDAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onPlayerGetSignedASIDListener);
+    Wortal_player_getSignedASIDAsync((OnGetSignedASIDCallback)Wortal_Player_OnGetSignedASID);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+static int Wortal_Player_CanSubscribeBotAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onPlayerCanSubscribeBotListener);
+    Wortal_player_canSubscribeBotAsync((OnCanSubscribeBotCallback)Wortal_Player_OnCanSubscribeBot);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+static int Wortal_Player_SubscribeBotAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onPlayerSubscribeBotListener);
+    Wortal_player_subscribeBotAsync((OnSubscribeBotCallback)Wortal_Player_OnSubscribeBot);
+
+    assert(top == lua_gettop(L));
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1129,6 +1421,21 @@ static int Wortal_Session_GetEntryPointAsync(lua_State* L) {
 	return 0;
 }
 
+static int Wortal_Session_GetPlatform(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getPlatform();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
 // Functions exposed to Lua
 static const luaL_reg Module_methods[] = {
 
@@ -1150,11 +1457,15 @@ static const luaL_reg Module_methods[] = {
 
     // Context API
     {"context_get_id", Wortal_Context_GetID},
+    {"context_get_type", Wortal_Context_GetType},
+    {"context_get_players", Wortal_Context_GetPlayersAsync},
     {"context_choose", Wortal_Context_ChooseAsync},
     {"context_share", Wortal_Context_ShareAsync},
+    {"context_share_link", Wortal_Context_ShareLinkAsync},
     {"context_update", Wortal_Context_UpdateAsync},
     {"context_switch", Wortal_Context_SwitchAsync},
     {"context_create", Wortal_Context_CreateAsync},
+    {"context_is_size_between", Wortal_Context_IsSizeBetween},
 
     // In-App Purchasing API
     {"iap_is_enabled", Wortal_IAP_IsEnabled},
@@ -1178,8 +1489,13 @@ static const luaL_reg Module_methods[] = {
     {"player_is_first_play", Wortal_Player_IsFirstPlay},
     {"player_get_data", Wortal_Player_GetDataAsync},
     {"player_set_data", Wortal_Player_SetDataAsync},
+    {"player_flush_data", Wortal_Player_FlushDataAsync},
     {"player_get_connected_players", Wortal_Player_GetConnectedPlayersAsync},
     {"player_get_signed_info", Wortal_Player_GetSignedPlayerInfoAsync},
+    {"player_get_asid", Wortal_Player_GetASIDAsync},
+    {"player_get_signed_asid", Wortal_Player_GetSignedASIDAsync},
+    {"player_can_subscribe_bot", Wortal_Player_CanSubscribeBotAsync},
+    {"player_subscribe_bot", Wortal_Player_SubscribeBotAsync},
 
     // Session API
     {"session_get_entry_point_data", Wortal_Session_GetEntryPointData},
@@ -1187,6 +1503,7 @@ static const luaL_reg Module_methods[] = {
     {"session_get_traffic_source", Wortal_Session_GetTrafficSource},
     {"session_set_session_data", Wortal_Session_SetSessionData},
     {"session_get_entry_point", Wortal_Session_GetEntryPointAsync},
+    {"session_get_platform", Wortal_Session_GetPlatform},
 
     {0, 0}
 };
