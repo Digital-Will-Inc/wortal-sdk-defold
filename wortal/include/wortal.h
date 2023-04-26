@@ -12,9 +12,11 @@ typedef void (*OnBeforeAdCallback)(const int success);
 typedef void (*OnAfterAdCallback)(const int success);
 typedef void (*OnAdDismissedCallback)(const int success);
 typedef void (*OnAdViewedCallback)(const int success);
+typedef void (*OnNoFillCallback)(const int success);
 
 // Context callbacks
 typedef void (*OnContextCallback)(const int success, const char* error);
+typedef void (*OnContextGetPlayersCallback)(const char* players, const char* error);
 typedef void (*OnContextShareCallback)(const int shareResult, const char* error);
 
 // IAP callbacks
@@ -34,8 +36,13 @@ typedef void (*OnLeaderboardGetConnectedPlayersEntriesCallback)(const char* entr
 // Player callbacks
 typedef void (*OnPlayerGetDataCallback)(const char* data, const char* error);
 typedef void (*OnPlayerSetDataCallback)(const int success, const char* error);
+typedef void (*OnPlayerFlushDataCallback)(const int success, const char* error);
 typedef void (*OnGetConnectedPlayersCallback)(const char* players, const char* error);
 typedef void (*OnGetSignedPlayerInfoCallback)(const char* info, const char* error);
+typedef void (*OnGetASIDCallback)(const char* asid, const char* error);
+typedef void (*OnGetSignedASIDCallback)(const char* signedASID, const char* error);
+typedef void (*OnCanSubscribeBotCallback)(const int canSubscribe, const char* error);
+typedef void (*OnSubscribeBotCallback)(const int success, const char* error);
 
 // Session callbacks
 typedef void (*OnGetEntryPointCallback)(const char* data, const char* error);
@@ -47,10 +54,11 @@ extern "C" {
 
     // Ads API
     void Wortal_ads_showInterstitial(const char* type, const char* description, OnBeforeAdCallback beforeAdCallback,
-    OnAfterAdCallback afterAdCallback);
+    OnAfterAdCallback afterAdCallback, OnNoFillCallback noFillCallback);
 
     void Wortal_ads_showRewarded(const char* description, OnBeforeAdCallback beforeAdCallback,
-    OnAfterAdCallback afterAdCallback, OnAdDismissedCallback adDismissedCallback, OnAdViewedCallback adViewedCallback);
+    OnAfterAdCallback afterAdCallback, OnAdDismissedCallback adDismissedCallback, OnAdViewedCallback adViewedCallback,
+    OnNoFillCallback noFillCallback);
 
     // Analytics API
     void Wortal_analytics_logLevelStart(const char* level);
@@ -63,11 +71,15 @@ extern "C" {
 
     // Context API
     char* Wortal_context_getID();
+    char* Wortal_context_getType();
+    void Wortal_context_getPlayersAsync(OnContextGetPlayersCallback callback);
     void Wortal_context_chooseAsync(const char* payload, OnContextCallback callback);
     void Wortal_context_shareAsync(const char* payload, OnContextShareCallback callback);
+    void Wortal_context_shareLinkAsync(const char* payload, OnContextCallback callback);
     void Wortal_context_updateAsync(const char* payload, OnContextCallback callback);
     void Wortal_context_switchAsync(const char* contextId, OnContextCallback callback);
     void Wortal_context_createAsync(const char* playerId, OnContextCallback callback);
+    char* Wortal_context_isSizeBetween(const int min, const int max);
 
     // In-App Purchasing API
     int Wortal_iap_isEnabled();
@@ -91,8 +103,13 @@ extern "C" {
     int Wortal_player_isFirstPlay();
     void Wortal_player_getDataAsync(const char* keys, OnPlayerGetDataCallback callback);
     void Wortal_player_setDataAsync(const char* data, OnPlayerSetDataCallback callback);
+    void Wortal_player_flushDataAsync(OnPlayerFlushDataCallback callback);
     void Wortal_player_getConnectedPlayersAsync(const char* payload, OnGetConnectedPlayersCallback callback);
     void Wortal_player_getSignedPlayerInfoAsync(OnGetSignedPlayerInfoCallback callback);
+    void Wortal_player_getASIDAsync(OnGetASIDCallback callback);
+    void Wortal_player_getSignedASIDAsync(OnGetSignedASIDCallback callback);
+    void Wortal_player_canSubscribeBotAsync(OnCanSubscribeBotCallback callback);
+    void Wortal_player_subscribeBotAsync(OnSubscribeBotCallback callback);
 
     // Session API
     char* Wortal_session_getEntryPointData();
@@ -100,6 +117,7 @@ extern "C" {
     char* Wortal_session_getTrafficSource();
     void Wortal_session_setSessionData(const char* data);
     void Wortal_session_getEntryPointAsync(OnGetEntryPointCallback callback);
+    char* Wortal_session_getPlatform();
 }
 
 #endif
