@@ -5,6 +5,7 @@
 
 lua_Listener onContextGetPlayersListener;
 lua_Listener onContextChooseListener;
+lua_Listener onContextInviteListener;
 lua_Listener onContextShareListener;
 lua_Listener onContextShareLinkListener;
 lua_Listener onContextUpdateListener;
@@ -43,6 +44,27 @@ void WortalContext::OnContextChoose(const int success, const char* error) {
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onContextChooseListener);
+    lua_pushboolean(L, success);
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+void WortalContext::OnContextInvite(const int success, const char* error) {
+    lua_State* L = onContextInviteListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onContextInviteListener);
     lua_pushboolean(L, success);
     if (error) {
         lua_pushstring(L, error);
@@ -210,6 +232,17 @@ int WortalContext::ChooseAsync(lua_State* L) {
     const char* payload = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onContextChooseListener);
     Wortal_context_chooseAsync(payload, WortalContext::OnContextChoose);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalContext::InviteAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* payload = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onContextInviteListener);
+    Wortal_context_inviteAsync(payload, WortalContext::OnContextInvite);
 
     assert(top == lua_gettop(L));
     return 0;
