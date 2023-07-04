@@ -20,6 +20,16 @@ var WortalLib = {
         Utils._onPauseCallbackPtr = callback;
 
         window.Wortal.onPause(() => Utils.onPauseCallback);
+    },
+
+    Wortal_performHapticFeedback: function (callback) {
+        window.Wortal.performHapticFeedbackAsync()
+            .then(() =>  {
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
+            });
     }
 
 }

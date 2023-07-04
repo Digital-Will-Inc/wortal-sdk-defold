@@ -17,6 +17,7 @@
 #if defined(DM_PLATFORM_HTML5)
 
 lua_Listener onPauseListener;
+lua_Listener onHapticFeedbackListener;
 
 void Wortal::OnPause(const int success) {
     lua_State* L = onPauseListener.m_L;
@@ -26,6 +27,22 @@ void Wortal::OnPause(const int success) {
     lua_pushboolean(L, success);
 
     int ret = lua_pcall(L, 2, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+void Wortal::OnHapticFeedback(const int success, const char* error) {
+    lua_State* L = onHapticFeedbackListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onHapticFeedbackListener);
+    lua_pushboolean(L, success);
+    lua_pushstring(L, error);
+
+    int ret = lua_pcall(L, 3, 0, 0);
     if (ret != 0) {
         lua_pop(L, 1);
     }
@@ -44,9 +61,21 @@ int Wortal::SetPauseCallback(lua_State* L) {
     return 0;
 }
 
+int Wortal::PerformHapticFeedback(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onHapticFeedbackListener);
+
+    Wortal_performHapticFeedback(Wortal::OnHapticFeedback);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
 static const luaL_reg Module_methods[] = {
 
     {"on_pause", Wortal::SetPauseCallback},
+    {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
 
     {"ads_show_interstitial", WortalAds::ShowInterstitial},
     {"ads_show_rewarded", WortalAds::ShowRewarded},
