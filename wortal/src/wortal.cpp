@@ -72,10 +72,26 @@ int Wortal::PerformHapticFeedback(lua_State* L) {
     return 0;
 }
 
+int Wortal::GetSupportedAPIs(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_getSupportedAPIs();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
 static const luaL_reg Module_methods[] = {
 
     {"on_pause", Wortal::SetPauseCallback},
     {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
+    {"get_supported_apis", Wortal::GetSupportedAPIs},
 
     {"ads_show_interstitial", WortalAds::ShowInterstitial},
     {"ads_show_rewarded", WortalAds::ShowRewarded},

@@ -30,6 +30,10 @@ var WortalLib = {
             .catch(error => {
                 {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
+    },
+
+    Wortal_getSupportedAPIs: function () {
+        return Utils.allocateString(JSON.stringify(window.Wortal.getSupportedAPIs()));
     }
 
 }
