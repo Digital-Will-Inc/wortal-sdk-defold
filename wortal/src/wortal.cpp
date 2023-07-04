@@ -67,6 +67,7 @@ static const luaL_reg Module_methods[] = {
     {"context_get_type", WortalContext::GetType},
     {"context_get_players", WortalContext::GetPlayersAsync},
     {"context_choose", WortalContext::ChooseAsync},
+    {"context_invite", WortalContext::InviteAsync},
     {"context_share", WortalContext::ShareAsync},
     {"context_share_link", WortalContext::ShareLinkAsync},
     {"context_update", WortalContext::UpdateAsync},

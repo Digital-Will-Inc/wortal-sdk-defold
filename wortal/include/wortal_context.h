@@ -14,6 +14,7 @@ public:
     static int GetType(lua_State* L);
     static int GetPlayersAsync(lua_State* L);
     static int ChooseAsync(lua_State* L);
+    static int InviteAsync(lua_State* L);
     static int ShareAsync(lua_State* L);
     static int ShareLinkAsync(lua_State* L);
     static int UpdateAsync(lua_State* L);
@@ -36,6 +37,7 @@ extern "C" {
     char* Wortal_context_getType();
     void Wortal_context_getPlayersAsync(WortalContext::OnContextGetPlayersCallback callback);
     void Wortal_context_chooseAsync(const char* payload, WortalContext::OnContextCallback callback);
+    void Wortal_context_inviteAsync(const char* payload, WortalContext::OnContextCallback callback);
     void Wortal_context_shareAsync(const char* payload, WortalContext::OnContextShareCallback callback);
     void Wortal_context_shareLinkAsync(const char* payload, WortalContext::OnContextCallback callback);
     void Wortal_context_updateAsync(const char* payload, WortalContext::OnContextCallback callback);
