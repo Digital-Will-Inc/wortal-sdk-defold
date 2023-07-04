@@ -24,7 +24,7 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(players)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -34,7 +34,17 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
+            });
+    },
+
+    Wortal_context_inviteAsync: function (payload, callback) {
+        window.Wortal.context.inviteAsync(Utils.toObjectFromJsonString(payload))
+            .then(() => {
+                {{{ makeDynCall("vii", "callback") }}}(1, 0);
+            })
+            .catch(error => {
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -44,7 +54,7 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(shareResult, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -54,7 +64,7 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -64,7 +74,7 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -74,7 +84,7 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -84,7 +94,7 @@ var WortalContext = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
