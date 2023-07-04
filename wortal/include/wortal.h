@@ -11,6 +11,7 @@ public:
 
     static int SetPauseCallback(lua_State* L);
     static int PerformHapticFeedback(lua_State* L);
+    static int GetSupportedAPIs(lua_State* L);
 
 private:
     static void OnPause(const int success);
@@ -20,6 +21,7 @@ private:
 extern "C" {
     void Wortal_onPause(Wortal::OnPauseCallback callback);
     void Wortal_performHapticFeedback(Wortal::OnHapticFeedbackCallback callback);
+    char* Wortal_getSupportedAPIs();
 }
 
 #endif
