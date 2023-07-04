@@ -58,6 +58,10 @@ static const luaL_reg Module_methods[] = {
     {"analytics_log_tutorial_start", WortalAnalytics::LogTutorialStart},
     {"analytics_log_tutorial_end", WortalAnalytics::LogTutorialEnd},
     {"analytics_log_game_choice", WortalAnalytics::LogGameChoice},
+    {"analytics_log_social_invite", WortalAnalytics::LogSocialInvite},
+    {"analytics_log_social_share", WortalAnalytics::LogSocialShare},
+    {"analytics_log_purchase", WortalAnalytics::LogPurchase},
+    {"analytics_log_purchase_subscription", WortalAnalytics::LogPurchaseSubscription},
 
     {"context_get_id", WortalContext::GetID},
     {"context_get_type", WortalContext::GetType},

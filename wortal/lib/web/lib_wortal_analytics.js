@@ -28,7 +28,23 @@ var WortalAnalytics = {
 
     Wortal_analytics_logGameChoice: function (decision, choice) {
         window.Wortal.analytics.logGameChoice(UTF8ToString(decision), UTF8ToString(choice))
-    }
+    },
+
+    Wortal_analytics_logSocialInvite: function (placement) {
+        window.Wortal.analytics.logSocialInvite(UTF8ToString(placement));
+    },
+
+    Wortal_analytics_logSocialShare: function (placement) {
+        window.Wortal.analytics.logSocialShare(UTF8ToString(placement));
+    },
+
+    Wortal_analytics_logPurchase: function (productID, details) {
+        window.Wortal.analytics.logPurchase(UTF8ToString(productID), UTF8ToString(details));
+    },
+
+    Wortal_analytics_logPurchaseSubscription: function (productID, details) {
+        window.Wortal.analytics.logPurchaseSubscription(UTF8ToString(productID), UTF8ToString(details));
+    },
 
 }
 

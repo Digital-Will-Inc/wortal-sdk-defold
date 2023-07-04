@@ -13,6 +13,10 @@ public:
     static int LogTutorialStart(lua_State* L);
     static int LogTutorialEnd(lua_State* L);
     static int LogGameChoice(lua_State* L);
+    static int LogSocialInvite(lua_State* L);
+    static int LogSocialShare(lua_State* L);
+    static int LogPurchase(lua_State* L);
+    static int LogPurchaseSubscription(lua_State* L);
 };
 
 extern "C" {
@@ -23,6 +27,10 @@ extern "C" {
     void Wortal_analytics_logTutorialStart(const char* tutorial);
     void Wortal_analytics_logTutorialEnd(const char* tutorial, const int wasCompleted);
     void Wortal_analytics_logGameChoice(const char* decision, const char* choice);
+    void Wortal_analytics_logSocialInvite(const char* placement);
+    void Wortal_analytics_logSocialShare(const char* placement);
+    void Wortal_analytics_logPurchase(const char* productID, const char* details);
+    void Wortal_analytics_logPurchaseSubscription(const char* productID, const char* details);
 }
 
 #endif

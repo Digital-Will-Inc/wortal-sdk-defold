@@ -77,4 +77,46 @@ int WortalAnalytics::LogGameChoice(lua_State* L) {
     return 0;
 }
 
+int WortalAnalytics::LogSocialInvite(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* placement = luaL_checkstring(L, 1);
+    Wortal_analytics_logSocialInvite(placement);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalAnalytics::LogSocialShare(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* placement = luaL_checkstring(L, 1);
+    Wortal_analytics_logSocialShare(placement);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalAnalytics::LogPurchase(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* productID = luaL_checkstring(L, 1);
+    const char* details = luaL_checkstring(L, 2);
+    Wortal_analytics_logPurchase(productID, details);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalAnalytics::LogPurchaseSubscription(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* productID = luaL_checkstring(L, 1);
+    const char* details = luaL_checkstring(L, 2);
+    Wortal_analytics_logPurchaseSubscription(productID, details);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
 #endif
