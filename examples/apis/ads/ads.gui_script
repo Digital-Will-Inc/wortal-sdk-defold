@@ -31,11 +31,11 @@ function on_input(self, action_id, action)
 	end)
 
 	dirtylarry.button("show_interstitial", action_id, action, function()
-		wortal.ads_show_interstitial("next", "NextLevel", on_before_ad, on_after_ad)
+		wortal.ads_show_interstitial("next", "NextLevel", on_before_ad, on_after_ad, on_after_ad)
 	end)
 
 	dirtylarry.button("show_rewarded", action_id, action, function()
-		wortal.ads_show_rewarded("ReviveAndContinue", on_before_ad, on_after_ad, on_skip_ad, on_reward_ad)
+		wortal.ads_show_rewarded("ReviveAndContinue", on_before_ad, on_after_ad, on_skip_ad, on_reward_ad, on_after_ad)
 	end)
 end
 
