@@ -10,7 +10,7 @@ var WortalIAP = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(catalog)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -20,7 +20,7 @@ var WortalIAP = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(purchases)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -30,7 +30,7 @@ var WortalIAP = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(purchase)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -40,7 +40,7 @@ var WortalIAP = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     }
 

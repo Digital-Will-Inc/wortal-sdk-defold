@@ -22,7 +22,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(data)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -32,7 +32,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -42,7 +42,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -52,7 +52,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(players)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -62,7 +62,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(info)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -72,7 +72,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(asid), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -82,7 +82,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(asid), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -92,7 +92,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(canSubscribe ? 1 : 0, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -102,7 +102,7 @@ var WortalPlayer = {
                 {{{ makeDynCall("vii", "callback") }}}(1, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     }
 

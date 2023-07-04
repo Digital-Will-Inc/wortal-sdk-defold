@@ -6,7 +6,7 @@ var WortalLeaderboard = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(leaderboard)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -16,7 +16,7 @@ var WortalLeaderboard = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entry)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -26,7 +26,7 @@ var WortalLeaderboard = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entries)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -36,7 +36,7 @@ var WortalLeaderboard = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entry)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -46,7 +46,7 @@ var WortalLeaderboard = {
                 {{{ makeDynCall("vii", "callback") }}}(count, 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     },
 
@@ -56,7 +56,7 @@ var WortalLeaderboard = {
                 {{{ makeDynCall("vii", "callback") }}}(Utils.allocateString(JSON.stringify(entries)), 0);
             })
             .catch(error => {
-                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(error.code));
+                {{{ makeDynCall("vii", "callback") }}}(0, Utils.allocateString(JSON.stringify(error)));
             });
     }
 
