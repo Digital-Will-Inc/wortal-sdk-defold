@@ -1,0 +1,114 @@
+#include "wortal_session.h"
+#include "luautils.h"
+
+#if defined(DM_PLATFORM_HTML5)
+
+lua_Listener onSessionGetEntryPointListener;
+
+void WortalSession::OnGetEntryPoint(const char* entryPoint, const char* error) {
+    lua_State* L = onSessionGetEntryPointListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onSessionGetEntryPointListener);
+    if (entryPoint) {
+        lua_pushstring(L, entryPoint);
+    }
+    else {
+        lua_pushnil(L);
+    }
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+int WortalSession::GetEntryPointData(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getEntryPointData();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+int WortalSession::GetLocale(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getLocale();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+int WortalSession::GetTrafficSource(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getTrafficSource();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+int WortalSession::SetSessionData(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = luaL_checkstring(L, 1);
+    Wortal_session_setSessionData(data);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalSession::GetEntryPointAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onSessionGetEntryPointListener);
+    Wortal_session_getEntryPointAsync(WortalSession::OnGetEntryPoint);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalSession::GetPlatform(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getPlatform();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+#endif
