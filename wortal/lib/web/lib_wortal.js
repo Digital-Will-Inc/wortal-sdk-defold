@@ -12,7 +12,7 @@ var WortalLib = {
         },
 
         toObjectFromJsonString: function(str) {
-            return JSON.parse(UTF8ToString(str));
+            return JSON.parse(UTF8ToString(str) || "{}");
         }
     },
 
