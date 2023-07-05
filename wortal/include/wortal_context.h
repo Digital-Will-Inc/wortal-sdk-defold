@@ -25,6 +25,7 @@ public:
 private:
     static void OnGetPlayers(const char* players, const char* error);
     static void OnContextChoose(const int success, const char* error);
+    static void OnContextInvite(const int success, const char* error);
     static void OnContextShare(const int shareResult, const char* error);
     static void OnContextShareLink(const int success, const char* error);
     static void OnContextUpdate(const int success, const char* error);
