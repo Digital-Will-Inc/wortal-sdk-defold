@@ -12,8 +12,7 @@ lua_Listener onContextUpdateListener;
 lua_Listener onContextSwitchListener;
 lua_Listener onContextCreateListener;
 
-void WortalContext::OnGetPlayers(const char* players, const char* error)
-{
+void WortalContext::OnGetPlayers(const char* players, const char* error) {
     lua_State* L = onContextGetPlayersListener.m_L;
     int top = lua_gettop(L);
 

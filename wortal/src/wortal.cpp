@@ -4,6 +4,7 @@
 #include "wortal_context.h"
 #include "wortal_iap.h"
 #include "wortal_leaderboard.h"
+#include "wortal_notifications.h"
 #include "wortal_player.h"
 #include "wortal_session.h"
 #include "luautils.h"
@@ -132,6 +133,11 @@ static const luaL_reg Module_methods[] = {
     {"leaderboard_get_player_entry", WortalLeaderboard::GetPlayerEntryAsync},
     {"leaderboard_get_entry_count", WortalLeaderboard::GetEntryCountAsync},
     {"leaderboard_get_connected_players_entries", WortalLeaderboard::GetConnectedPlayersEntriesAsync},
+
+    {"notifications_schedule", WortalNotifications::ScheduleAsync},
+    {"notifications_get_history", WortalNotifications::GetHistoryAsync},
+    {"notifications_cancel", WortalNotifications::CancelAsync},
+    {"notifications_cancel_all", WortalNotifications::CancelAllAsync},
 
     {"player_get_id", WortalPlayer::GetID},
     {"player_get_name", WortalPlayer::GetName},
