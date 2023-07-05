@@ -126,9 +126,9 @@ int WortalNotifications::GetHistoryAsync(lua_State* L) {
 int WortalNotifications::CancelAsync(lua_State* L) {
     int top = lua_gettop(L);
 
-    const char* notificationId = luaL_checkstring(L, 1);
+    const char* id = luaL_checkstring(L, 1);
     luaL_checklistener(L, 2, onNotificationsCancelListener);
-    Wortal_notifications_cancelAsync(notificationId, WortalNotifications::OnCancel);
+    Wortal_notifications_cancelAsync(id, WortalNotifications::OnCancel);
 
     assert(top == lua_gettop(L));
     return 0;

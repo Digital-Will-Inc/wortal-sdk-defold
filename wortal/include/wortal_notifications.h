@@ -4,7 +4,7 @@
 
 #if defined(DM_PLATFORM_HTML5)
 
-class WortalNotifcations {
+class WortalNotifications {
 public:
     typedef void (*OnScheduleCallback)(const char* result, const char* error);
     typedef void (*OnGetHistoryCallback)(const char* notifications, const char* error);
@@ -24,10 +24,10 @@ private:
 };
 
 extern "C" {
-    void Wortal_notifications_scheduleAsync(const char* payload, WortalNotifcations::OnScheduleCallback callback);
-    void Wortal_notifications_getHistoryAsync(WortalNotifcations::OnGetHistoryCallback callback);
-    void Wortal_notifications_cancelAsync(const char* notificationId, WortalNotifcations::OnCancelCallback callback);
-    void Wortal_notifications_cancelAllAsync(const char* label, WortalNotifcations::OnCancelAllCallback callback);
+    void Wortal_notifications_scheduleAsync(const char* payload, WortalNotifications::OnScheduleCallback callback);
+    void Wortal_notifications_getHistoryAsync(WortalNotifications::OnGetHistoryCallback callback);
+    void Wortal_notifications_cancelAsync(const char* id, WortalNotifications::OnCancelCallback callback);
+    void Wortal_notifications_cancelAllAsync(const char* label, WortalNotifications::OnCancelAllCallback callback);
 }
 
 #endif
