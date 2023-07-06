@@ -29,9 +29,11 @@ must be notified of the ad and give permission to show before it can be shown.
 
 ```lua
 -- This example shows the game flow independent of the outcome of the ad.
+-- Ex: Player gets bonus coins for watching the ad, but the game continues regardless of the outcome.
 wortal.ads_show_rewarded("BonusCoins", pause_game, resume_game, skip_bonus, add_bonus_coins)
 
 -- This example shows the game flow depending on the outcome of the ad.
+-- Ex: Player dies and can revive by watching an ad, but if they skip the ad they lose the level.
 wortal.ads_show_rewarded("ReviveAndContinue", pause_audio, resume_audio, end_game, continue_game)
 ```
 
@@ -69,11 +71,11 @@ and send messages to each other.
 local payload = {
     image = 'data:base64image',
     text = 'Invite text',
-    caption = 'Play',
+    cta = 'Play',
     data = { exampleData: 'yourData' },
 }
 
-wortal.context_choose(json.encode(payload), function(self, success, error)
+wortal.context_invite(json.encode(payload), function(self, success, error)
     popup.success_check(success, "Success!", "Error")
 end)
 
@@ -81,7 +83,7 @@ end)
 local payload = {
     image = 'data:base64image',
     text = 'Share text',
-    caption = 'Play',
+    cta = 'Play',
     data = { exampleData: 'yourData' },
 }
 
@@ -129,6 +131,33 @@ end)
 -- Add the player's score to the leaderboard.
 wortal.leaderboard_send_entry("global", 250, "details", function(self, entry, error)
     popup.success_check(entry, prettify(json.decode(entry)), "Leaderboard add failed")
+end)
+```
+
+### Notifications
+
+[API Reference](https://sdk.html5gameportal.com/api/notifications/)
+
+The Notifications API is used to send notifications to the player. These can be used to notify the player
+of an event in the game or to remind them to come back and play.
+
+```lua
+-- Schedule a notification to send to the player.
+local payload = {
+    title = "Your energy is full!",
+    body = "Come back and play again.",
+    mediaURL: "https://example.com/image.png",
+    label: "resources-full",
+    scheduleInterval: 300 
+}
+
+wortal.notifications_schedule(json.encode(payload), function(self, result, error)
+    popup.success_check(result, prettify(json.decode(result)), "Notification schedule failed")
+end)
+
+-- Cancel a scheduled notification.
+wortal.notifications_cancel("notification-123", function(self, success, error)
+    print(success)
 end)
 ```
 

@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2023-07-06
+### Added
+- Core
+    - Added Notifications API
+    - New APIs: getSupportedAPIs, performHapticFeedbackAsync
+- Analytics
+    - New events: logSocialInvite, logSocialShare, logPurchase, logPurchaseSubscription
+- Context
+    - New APIs: inviteAsync, shareLinkAsync, isSizeBetween
+
+### Fixed
+- Core
+  - Exception when passing empty string to js libs
+
+### Changed
+- Core
+    - Organized api, classes and typedefs
+
 ## [2.2.0] - 2023-04-26
 ### Added
 - Ads on Viber
