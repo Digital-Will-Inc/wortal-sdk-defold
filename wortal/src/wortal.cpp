@@ -7,13 +7,14 @@
 #include "wortal_notifications.h"
 #include "wortal_player.h"
 #include "wortal_session.h"
+#include "wortal_tournament.h"
 #include "luautils.h"
 #include <dmsdk/sdk.h>
 
 #define EXTENSION_NAME Wortal
 #define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
-#define VERSION "2.3.0"
+#define VERSION "2.4.0"
 
 #if defined(DM_PLATFORM_HTML5)
 
@@ -159,6 +160,13 @@ static const luaL_reg Module_methods[] = {
     {"session_set_session_data", WortalSession::SetSessionData},
     {"session_get_entry_point", WortalSession::GetEntryPointAsync},
     {"session_get_platform", WortalSession::GetPlatform},
+
+    {"tournament_get_current", WortalTournament::GetCurrentAsync},
+    {"tournament_get_all", WortalTournament::GetAllAsync},
+    {"tournament_post_score", WortalTournament::PostScoreAsync},
+    {"tournament_create", WortalTournament::CreateAsync},
+    {"tournament_share", WortalTournament::ShareAsync},
+    {"tournament_join", WortalTournament::JoinAsync},
 
     {0, 0}
 };
