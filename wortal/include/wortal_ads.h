@@ -12,6 +12,7 @@ public:
     typedef void (*OnAdViewedCallback)(const int success);
     typedef void (*OnNoFillCallback)(const int success);
 
+    static int IsAdBlocked(lua_State* L);
     static int ShowInterstitial(lua_State* L);
     static int ShowRewarded(lua_State* L);
 
@@ -24,6 +25,7 @@ private:
 };
 
 extern "C" {
+    int Wortal_ads_isAdBlocked();
     void Wortal_ads_showInterstitial(const char* type,
                                      const char* description,
                                      WortalAds::OnBeforeAdCallback beforeAdCallback,
