@@ -18,8 +18,42 @@
 
 #if defined(DM_PLATFORM_HTML5)
 
+lua_Listener onInitializeListener;
+lua_Listener onStartGameListener;
 lua_Listener onPauseListener;
 lua_Listener onHapticFeedbackListener;
+
+void Wortal::OnInitialize(const int success, const char* error) {
+    lua_State* L = onInitializeListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onInitializeListener);
+    lua_pushboolean(L, success);
+    lua_pushstring(L, error);
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+void Wortal::OnStartGame(const int success, const char* error) {
+    lua_State* L = onStartGameListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onStartGameListener);
+    lua_pushboolean(L, success);
+    lua_pushstring(L, error);
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
 
 void Wortal::OnPause(const int success) {
     lua_State* L = onPauseListener.m_L;
@@ -50,6 +84,47 @@ void Wortal::OnHapticFeedback(const int success, const char* error) {
     }
 
     assert(top == lua_gettop(L));
+}
+
+int Wortal::IsInitialized() {
+    int top = lua_gettop(onInitializeListener.m_L);
+
+    lua_pushboolean(onInitializeListener.m_L, Wortal_isInitialized());
+
+    assert(top + 1 == lua_gettop(onInitializeListener.m_L));
+    return 1;
+}
+
+int Wortal::InitializeAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onInitializeListener);
+
+    Wortal_initializeAsync(Wortal::OnInitialize);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int Wortal::StartGameAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onStartGameListener);
+
+    Wortal_startGameAsync(Wortal::OnStartGame);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int Wortal::SetLoadingProgress(lua_State* L) {
+    int top = lua_gettop(L);
+
+    int progress = luaL_checkinteger(L, 1);
+    Wortal_setLoadingProgress(progress);
+
+    assert(top == lua_gettop(L));
+    return 0;
 }
 
 int Wortal::SetPauseCallback(lua_State* L) {
@@ -91,6 +166,10 @@ int Wortal::GetSupportedAPIs(lua_State* L) {
 
 static const luaL_reg Module_methods[] = {
 
+    {"initialize", Wortal::InitializeAsync},
+    {"start_game", Wortal::StartGameAsync},
+    {"is_initialized", Wortal::IsInitialized},
+    {"set_loading_progress", Wortal::SetLoadingProgress},
     {"on_pause", Wortal::SetPauseCallback},
     {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
     {"get_supported_apis", Wortal::GetSupportedAPIs},
