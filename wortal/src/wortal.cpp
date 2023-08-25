@@ -95,6 +95,7 @@ static const luaL_reg Module_methods[] = {
     {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
     {"get_supported_apis", Wortal::GetSupportedAPIs},
 
+    {"ads_is_ad_blocked", WortalAds::IsAdBlocked},
     {"ads_show_interstitial", WortalAds::ShowInterstitial},
     {"ads_show_rewarded", WortalAds::ShowRewarded},
 
@@ -160,6 +161,10 @@ static const luaL_reg Module_methods[] = {
     {"session_set_session_data", WortalSession::SetSessionData},
     {"session_get_entry_point", WortalSession::GetEntryPointAsync},
     {"session_get_platform", WortalSession::GetPlatform},
+    {"session_get_device", WortalSession::GetDevice},
+    {"session_get_orientation", WortalSession::GetOrientation},
+    {"session_on_orientation_change", WortalSession::OnOrientationChange},
+    {"session_switch_game", WortalSession::SwitchGameAsync},
 
     {"tournament_get_current", WortalTournament::GetCurrentAsync},
     {"tournament_get_all", WortalTournament::GetAllAsync},

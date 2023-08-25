@@ -28,6 +28,10 @@ var WortalAds = {
         }
     },
 
+    Wortal_ads_isAdBlocked: function () {
+        return window.Wortal.ads.isAdBlocked() ? 1 : 0;
+    },
+
     Wortal_ads_showInterstitial: function (placement, description, beforeAdCallback, afterAdCallback, noFillCallback) {
         Ads._beforeAdCallbackPtr = beforeAdCallback;
         Ads._afterAdCallbackPtr = afterAdCallback;

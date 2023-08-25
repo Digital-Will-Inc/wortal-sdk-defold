@@ -4,6 +4,8 @@
 #if defined(DM_PLATFORM_HTML5)
 
 lua_Listener onSessionGetEntryPointListener;
+lua_Listener onOrientationChangeListener;
+lua_Listener onSwitchGameListener;
 
 void WortalSession::OnGetEntryPoint(const char* entryPoint, const char* error) {
     lua_State* L = onSessionGetEntryPointListener.m_L;
@@ -16,6 +18,47 @@ void WortalSession::OnGetEntryPoint(const char* entryPoint, const char* error) {
     else {
         lua_pushnil(L);
     }
+    if (error) {
+        lua_pushstring(L, error);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 3, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+void WortalSession::OnOrientationChange(const char* orientation) {
+    lua_State* L = onOrientationChangeListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onOrientationChangeListener);
+    if (orientation) {
+        lua_pushstring(L, orientation);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    int ret = lua_pcall(L, 2, 0, 0);
+    if (ret != 0) {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+void WortalSession::OnSwitchGame(const int success, const char* error) {
+    lua_State* L = onSwitchGameListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushlistener(L, onSwitchGameListener);
+    lua_pushboolean(L, success);
     if (error) {
         lua_pushstring(L, error);
     }
@@ -109,6 +152,57 @@ int WortalSession::GetPlatform(lua_State* L) {
 
     assert(top + 1 == lua_gettop(L));
     return 1;
+}
+
+int WortalSession::GetDevice(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getDevice();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+int WortalSession::GetOrientation(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* data = Wortal_session_getOrientation();
+    if (data) {
+        lua_pushstring(L, data);
+    }
+    else {
+        lua_pushnil(L);
+    }
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
+int WortalSession::OnOrientationChange(lua_State* L) {
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onOrientationChangeListener);
+    Wortal_session_onOrientationChange(WortalSession::OnOrientationChange);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int WortalSession::SwitchGameAsync(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const char* gameID = luaL_checkstring(L, 1);
+    luaL_checklistener(L, 2, onSwitchGameListener);
+    Wortal_session_switchGameAsync(gameID, WortalSession::OnSwitchGame);
+
+    assert(top == lua_gettop(L));
+    return 0;
 }
 
 #endif

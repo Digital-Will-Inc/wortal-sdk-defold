@@ -84,6 +84,15 @@ void WortalAds::OnNoFill(const int success) {
     assert(top == lua_gettop(L));
 }
 
+int WortalAds::IsAdBlocked(lua_State* L) {
+    int top = lua_gettop(L);
+
+    lua_pushboolean(L, Wortal_ads_isAdBlocked());
+
+    assert(top + 1 == lua_gettop(L));
+    return 1;
+}
+
 int WortalAds::ShowInterstitial(lua_State* L) {
     int top = lua_gettop(L);
 
