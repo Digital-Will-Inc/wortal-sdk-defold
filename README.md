@@ -195,3 +195,31 @@ wortal.session_get_entry_point(function(self, entryPoint, error)
     popup.success_check(entryPoint, entryPoint, "Error")
 end)
 ```
+
+### Tournament
+
+[API Reference](https://sdk.html5gameportal.com/api/tournament/)
+
+The Tournament API is used to create and manage tournaments for your game.
+
+```lua
+// Create a tournament.
+local payload = {
+    initialScore: 100,
+    config: {
+        title: "Level 1 Tournament",
+    },
+    data: {
+        level: 1,
+    },
+};
+
+wortal.tournament_create(json.encode(payload)), function(self, tournament, error)
+    popup.success_check(tournament, prettify(json.decode(tournament)), "Error")
+end)
+
+// Post a score to a tournament.
+wortal.tournament_post_score(200), function(self, success, error)
+    popup.success_check(success, "Success!", "Error")
+end)
+```
