@@ -86,7 +86,7 @@ void Wortal::OnHapticFeedback(const int success, const char* error) {
     assert(top == lua_gettop(L));
 }
 
-int Wortal::IsInitialized() {
+int Wortal::IsInitialized(lua_State* L) {
     int top = lua_gettop(onInitializeListener.m_L);
 
     lua_pushboolean(onInitializeListener.m_L, Wortal_isInitialized());
