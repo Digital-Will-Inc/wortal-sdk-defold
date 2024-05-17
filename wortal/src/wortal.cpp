@@ -1,4 +1,5 @@
 #include "wortal.h"
+#include "wortal_achievements.h"
 #include "wortal_ads.h"
 #include "wortal_analytics.h"
 #include "wortal_context.h"
@@ -173,6 +174,9 @@ static const luaL_reg Module_methods[] = {
     {"on_pause", Wortal::SetPauseCallback},
     {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
     {"get_supported_apis", Wortal::GetSupportedAPIs},
+
+    {"achievements_get_achievements", WortalAchievements::GetAchievementsAsync},
+    {"achievements_unlock_achievement", WortalAchievements::UnlockAchievementAsync},
 
     {"ads_is_ad_blocked", WortalAds::IsAdBlocked},
     {"ads_show_interstitial", WortalAds::ShowInterstitial},
