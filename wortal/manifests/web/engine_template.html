@@ -4,5 +4,33 @@
     <script src="https://storage.googleapis.com/cdn-wortal-ai/v2/wortal-core.js"></script>
 </head>
 <body>
+    <script>
+        if (Wortal) {
+            // This should be called as soon as possible as the SDK cannot be used until it's finished initializing.
+            Wortal.initializeAsync().then(() => {
+                // SDK ready to use, you can start the game now. If your game is still loading assets then you can
+                // comment out the startGameAsync call and call it when your game is ready.
+                Wortal.startGameAsync().then(() => {
+                    // Game ready to play, player is shown the game.
+                }).catch(err => {
+                    console.error(err);
+                });
+            }).catch(err => {
+                console.error(err);
+            });
+        } else {
+            console.error("[Wortal] FATAL::Wortal SDK not found.");
+        }
+
+        // We auto-report progress based on the engine loading, if your game needs additional time to load assets,
+        // you can comment this out and report progress manually so the game does not start before it's ready.
+        if (Progress) {
+            Progress.addListener(val => {
+                if (Wortal) {
+                    Wortal.setLoadingProgress(val);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
