@@ -18,7 +18,7 @@ private:
 };
 
 extern "C" {
-    void Wortal_achievements_getAchievementsAsync(const char* achievements, WortalAchievements::OnGetAchievementsCallback callback);
+    void Wortal_achievements_getAchievementsAsync(WortalAchievements::OnGetAchievementsCallback callback);
     void Wortal_achievements_unlockAchievementAsync(const char* achievementId, WortalAchievements::OnUnlockAchievementCallback callback);
 }
 

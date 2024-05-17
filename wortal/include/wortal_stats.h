@@ -7,7 +7,7 @@
 class WortalStats {
 public:
     typedef void (*OnGetStatsCallback)(const char* stats, const char* error);
-    typedef void (*OnPostStatCallback)(const int success, const char* error);
+    typedef void (*OnPostStatsCallback)(const int success, const char* error);
 
     static int GetStatsAsync(lua_State* L);
     static int PostStatsAsync(lua_State* L);
