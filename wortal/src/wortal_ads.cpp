@@ -124,4 +124,16 @@ int WortalAds::ShowRewarded(lua_State* L) {
     return 0;
 }
 
+int WortalAds::ShowBanner(lua_State* L) {
+    int top = lua_gettop(L);
+
+    const int shouldShow = luaL_checkinteger(L, 1);
+    const char* position = luaL_checkstring(L, 2);
+
+    Wortal_ads_showBanner(shouldShow, position);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
 #endif

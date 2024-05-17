@@ -8,7 +8,7 @@ Add [Wortal SDK](https://github.com/Digital-Will-Inc/wortal-sdk-defold/archive/m
 
 ### Ads
 
-[API Reference](https://sdk.html5gameportal.com/api/ads/)
+[API Reference](https://docs.games-api.ai/api/ads/)
 
 Interstitial ads can be shown at various points in the game such as a level end, restart or a timed
 interval in games with longer levels.
@@ -41,7 +41,7 @@ wortal.ads_show_rewarded("ReviveAndContinue", pause_audio, resume_audio, end_gam
 
 ### Analytics
 
-[API Reference](https://sdk.html5gameportal.com/api/analytics/)
+[API Reference](https://docs.games-api.ai/api/analytics/)
 
 The Analytics API can be used to track game events that can help better understand how players are interacting with
 the game. This data will be available for viewing in the Wortal dashboard.
@@ -59,9 +59,28 @@ wortal.analytics_log_level_end("Level 3", "100", 1)
 wortal.analytics_log_game_choice("Character", "Blue")
 ```
 
+### Achievements
+
+[API Reference](https://docs.games-api.ai/api/achievements/)
+
+The Achievements API is used to track the player's progress in the game. Achievements can be unlocked by completing
+specific tasks or reaching certain milestones.
+
+```lua
+-- Unlock an achievement.
+wortal.achievements_unlock_achievement("achievement-123", function(self, success, error)
+    popup.success_check(success, "Success!", "Error")
+end)
+
+-- Get a list of the player's achievements.
+wortal.achievements_get_achievements(function(self, achievements, error)
+    popup.success_check(achievements, prettify(json.decode(achievements)), "Error")
+end)
+```
+
 ### Context
 
-[API Reference](https://sdk.html5gameportal.com/api/context/)
+[API Reference](https://docs.games-api.ai/api/context/)
 
 The Context API is used to connect players and allow them to interact in the game session, share their content
 and send messages to each other.
@@ -94,7 +113,7 @@ end)
 
 ### In-App Purchases
 
-[API Reference](https://sdk.html5gameportal.com/api/iap/)
+[API Reference](https://docs.games-api.ai/api/iap/)
 
 The In-App Purchases (IAP) API is used to provide an interface for in-game transactions on the platforms.
 This process will differ based on what platform the game is being played on, but the API remains the same.
@@ -117,7 +136,7 @@ end)
 
 ### Leaderboards
 
-[API Reference](https://sdk.html5gameportal.com/api/leaderboard/)
+[API Reference](https://docs.games-api.ai/api/leaderboard/)
 
 The Leaderboard API gives the game access to the platform's leaderboard functionality. This is where
 you can track player's scores and compare them to other players.
@@ -136,7 +155,7 @@ end)
 
 ### Notifications
 
-[API Reference](https://sdk.html5gameportal.com/api/notifications/)
+[API Reference](https://docs.games-api.ai/api/notifications/)
 
 The Notifications API is used to send notifications to the player. These can be used to notify the player
 of an event in the game or to remind them to come back and play.
@@ -148,7 +167,7 @@ local payload = {
     body = "Come back and play again.",
     mediaURL: "https://example.com/image.png",
     label: "resources-full",
-    scheduleInterval: 300 
+    scheduleInterval: 300
 }
 
 wortal.notifications_schedule(json.encode(payload), function(self, result, error)
@@ -163,7 +182,7 @@ end)
 
 ### Player
 
-[API Reference](https://sdk.html5gameportal.com/api/player/)
+[API Reference](https://docs.games-api.ai/api/player/)
 
 You can find details about the current player via the Player API.
 
@@ -185,7 +204,7 @@ end)
 
 ### Session
 
-[API Reference](https://sdk.html5gameportal.com/api/session/)
+[API Reference](https://docs.games-api.ai/api/session/)
 
 Details about the current session can be accessed in the Session API.
 
@@ -196,9 +215,27 @@ wortal.session_get_entry_point(function(self, entryPoint, error)
 end)
 ```
 
+### Stats
+
+[API Reference](https://docs.games-api.ai/api/stats/)
+
+The Stats API is used to track player statistics in the game.
+
+```lua
+-- Track the player's progress in the game.
+wortal.stats_post_stats("level 1", 3, function(self, success, error)
+    popup.success_check(success, "Success!", "Error")
+end)
+
+-- Get the player's stats.
+wortal.stats_get_stats("level 1", function(self, stats, error)
+    popup.success_check(stats, prettify(json.decode(stats)), "Error")
+end)
+```
+
 ### Tournament
 
-[API Reference](https://sdk.html5gameportal.com/api/tournament/)
+[API Reference](https://docs.games-api.ai/api/tournament/)
 
 The Tournament API is used to create and manage tournaments for your game.
 

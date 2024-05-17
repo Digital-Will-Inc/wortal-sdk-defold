@@ -1,4 +1,5 @@
 #include "wortal.h"
+#include "wortal_achievements.h"
 #include "wortal_ads.h"
 #include "wortal_analytics.h"
 #include "wortal_context.h"
@@ -7,6 +8,7 @@
 #include "wortal_notifications.h"
 #include "wortal_player.h"
 #include "wortal_session.h"
+#include "wortal_stats.h"
 #include "wortal_tournament.h"
 #include "luautils.h"
 #include <dmsdk/sdk.h>
@@ -14,7 +16,7 @@
 #define EXTENSION_NAME Wortal
 #define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
-#define VERSION "2.4.0"
+#define VERSION "3.0.0"
 
 #if defined(DM_PLATFORM_HTML5)
 
@@ -174,9 +176,13 @@ static const luaL_reg Module_methods[] = {
     {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
     {"get_supported_apis", Wortal::GetSupportedAPIs},
 
+    {"achievements_get_achievements", WortalAchievements::GetAchievementsAsync},
+    {"achievements_unlock_achievement", WortalAchievements::UnlockAchievementAsync},
+
     {"ads_is_ad_blocked", WortalAds::IsAdBlocked},
     {"ads_show_interstitial", WortalAds::ShowInterstitial},
     {"ads_show_rewarded", WortalAds::ShowRewarded},
+    {"ads_show_banner", WortalAds::ShowBanner},
 
     {"analytics_log_level_start", WortalAnalytics::LogLevelStart},
     {"analytics_log_level_end", WortalAnalytics::LogLevelEnd},
@@ -244,6 +250,9 @@ static const luaL_reg Module_methods[] = {
     {"session_get_orientation", WortalSession::GetOrientation},
     {"session_on_orientation_change", WortalSession::OnOrientationChange},
     {"session_switch_game", WortalSession::SwitchGameAsync},
+
+    {"stats_get_stats", WortalStats::GetStatsAsync},
+    {"stats_post_stats", WortalStats::PostStatsAsync},
 
     {"tournament_get_current", WortalTournament::GetCurrentAsync},
     {"tournament_get_all", WortalTournament::GetAllAsync},

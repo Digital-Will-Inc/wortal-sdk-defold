@@ -44,7 +44,7 @@ var WortalAnalytics = {
 
     Wortal_analytics_logPurchaseSubscription: function (productID, details) {
         window.Wortal.analytics.logPurchaseSubscription(UTF8ToString(productID), UTF8ToString(details));
-    },
+    }
 
 }
 
