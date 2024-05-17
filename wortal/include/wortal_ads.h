@@ -15,6 +15,7 @@ public:
     static int IsAdBlocked(lua_State* L);
     static int ShowInterstitial(lua_State* L);
     static int ShowRewarded(lua_State* L);
+    static int ShowBanner(lua_State* L);
 
 private:
     static void OnBeforeAd(const int success);
@@ -38,6 +39,8 @@ extern "C" {
                                  WortalAds::OnAdDismissedCallback adDismissedCallback,
                                  WortalAds::OnAdViewedCallback adViewedCallback,
                                  WortalAds::OnNoFillCallback noFillCallback);
+
+    void Wortal_ads_showBanner(const int shouldShow, const char* position);
 }
 
 #endif

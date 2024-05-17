@@ -53,6 +53,10 @@ var WortalAds = {
             Ads.adDismissedCallback, Ads.adViewedCallback, Ads.noFillCallback);
     },
 
+    Wortal_ads_showBanner: function (shouldShow, position) {
+        window.Wortal.ads.showBanner(shouldShow, position);
+    }
+
 }
 
 autoAddDeps(WortalLib, '$Ads');
