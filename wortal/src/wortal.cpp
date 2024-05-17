@@ -8,6 +8,7 @@
 #include "wortal_notifications.h"
 #include "wortal_player.h"
 #include "wortal_session.h"
+#include "wortal_stats.h"
 #include "wortal_tournament.h"
 #include "luautils.h"
 #include <dmsdk/sdk.h>
@@ -249,6 +250,9 @@ static const luaL_reg Module_methods[] = {
     {"session_get_orientation", WortalSession::GetOrientation},
     {"session_on_orientation_change", WortalSession::OnOrientationChange},
     {"session_switch_game", WortalSession::SwitchGameAsync},
+
+    {"stats_get_stats", WortalStats::GetStatsAsync},
+    {"stats_post_stats", WortalStats::PostStatsAsync},
 
     {"tournament_get_current", WortalTournament::GetCurrentAsync},
     {"tournament_get_all", WortalTournament::GetAllAsync},
