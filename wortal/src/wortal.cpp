@@ -14,7 +14,7 @@
 #define EXTENSION_NAME Wortal
 #define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
-#define VERSION "2.4.0"
+#define VERSION "3.0.0"
 
 #if defined(DM_PLATFORM_HTML5)
 
@@ -177,6 +177,7 @@ static const luaL_reg Module_methods[] = {
     {"ads_is_ad_blocked", WortalAds::IsAdBlocked},
     {"ads_show_interstitial", WortalAds::ShowInterstitial},
     {"ads_show_rewarded", WortalAds::ShowRewarded},
+    {"ads_show_banner", WortalAds::ShowBanner},
 
     {"analytics_log_level_start", WortalAnalytics::LogLevelStart},
     {"analytics_log_level_end", WortalAnalytics::LogLevelEnd},
