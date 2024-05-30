@@ -62,4 +62,4 @@ var WortalLeaderboard = {
 
 }
 
-mergeInto(LibraryManager.library, WortalLeaderboard);
+addToLibrary(WortalLeaderboard);

@@ -46,4 +46,4 @@ var WortalIAP = {
 
 }
 
-mergeInto(LibraryManager.library, WortalIAP);
+addToLibrary(WortalIAP);

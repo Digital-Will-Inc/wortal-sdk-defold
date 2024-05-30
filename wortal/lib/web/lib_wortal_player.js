@@ -108,4 +108,4 @@ var WortalPlayer = {
 
 }
 
-mergeInto(LibraryManager.library, WortalPlayer);
+addToLibrary(WortalPlayer);

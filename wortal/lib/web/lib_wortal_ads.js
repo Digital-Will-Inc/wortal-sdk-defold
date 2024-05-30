@@ -61,4 +61,4 @@ var WortalAds = {
 
 autoAddDeps(WortalLib, '$Ads');
 autoAddDeps(WortalLib, '$Utils');
-mergeInto(LibraryManager.library, WortalAds);
+addToLibrary(WortalAds);
