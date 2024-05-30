@@ -109,4 +109,4 @@ var WortalContext = {
 
 }
 
-mergeInto(LibraryManager.library, WortalContext);
+addToLibrary(WortalContext);

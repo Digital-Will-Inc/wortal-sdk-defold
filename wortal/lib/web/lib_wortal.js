@@ -8,7 +8,7 @@ var WortalLib = {
         },
 
         allocateString: function(str) {
-            return allocate(intArrayFromString(str), ALLOC_STACK);
+            return stringToUTF8OnStack(str);
         },
 
         toObjectFromJsonString: function(str) {
@@ -68,4 +68,4 @@ var WortalLib = {
 
 autoAddDeps(WortalLib, '$Ads');
 autoAddDeps(WortalLib, '$Utils');
-mergeInto(LibraryManager.library, WortalLib);
+addToLibrary(WortalLib);

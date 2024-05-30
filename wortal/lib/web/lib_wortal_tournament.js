@@ -62,4 +62,4 @@ var WortalTournament = {
 
 }
 
-mergeInto(LibraryManager.library, WortalTournament);
+addToLibrary(WortalTournament);

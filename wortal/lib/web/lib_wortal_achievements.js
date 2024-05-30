@@ -22,4 +22,4 @@ var WortalAchievements = {
 
 }
 
-mergeInto(LibraryManager.library, WortalAchievements);
+addToLibrary(WortalAchievements);

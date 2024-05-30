@@ -22,4 +22,4 @@ var WortalStats = {
 
 }
 
-mergeInto(LibraryManager.library, WortalStats);
+addToLibrary(WortalStats);
