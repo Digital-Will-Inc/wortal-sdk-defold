@@ -48,4 +48,4 @@ var WortalAnalytics = {
 
 }
 
-mergeInto(LibraryManager.library, WortalAnalytics);
+addToLibrary(WortalAnalytics);

@@ -56,4 +56,4 @@ var WortalSession = {
 
 }
 
-mergeInto(LibraryManager.library, WortalSession);
+addToLibrary(WortalSession);

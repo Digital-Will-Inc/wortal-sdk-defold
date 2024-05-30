@@ -42,4 +42,4 @@ var WortalNotifications = {
 
 }
 
-mergeInto(LibraryManager.library, WortalNotifications);
+addToLibrary(WortalNotifications);
