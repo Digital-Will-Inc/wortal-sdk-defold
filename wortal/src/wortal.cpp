@@ -16,7 +16,7 @@
 #define EXTENSION_NAME Wortal
 #define LIB_NAME "Wortal"
 #define MODULE_NAME "wortal"
-#define VERSION "3.0.0"
+#define VERSION "3.0.1"
 
 #if defined(DM_PLATFORM_HTML5)
 
