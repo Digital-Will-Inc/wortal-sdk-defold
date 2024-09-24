@@ -55,6 +55,10 @@ var WortalAds = {
 
     Wortal_ads_showBanner: function (shouldShow, position) {
         window.Wortal.ads.showBanner(shouldShow, position);
+    },
+
+    Wortal_ads_isEnabled: function(){
+        return window.Wortal.ads.isEnabled() ? 1 : 0;
     }
 
 }
