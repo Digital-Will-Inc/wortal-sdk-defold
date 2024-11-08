@@ -23,10 +23,12 @@
 lua_Listener onInitializeListener;
 lua_Listener onStartGameListener;
 lua_Listener onPauseListener;
+lua_Listener onResumeListener;
 lua_Listener onHapticFeedbackListener;
 
-void Wortal::OnInitialize(const int success, const char* error) {
-    lua_State* L = onInitializeListener.m_L;
+void Wortal::OnInitialize(const int success, const char *error)
+{
+    lua_State *L = onInitializeListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onInitializeListener);
@@ -34,15 +36,17 @@ void Wortal::OnInitialize(const int success, const char* error) {
     lua_pushstring(L, error);
 
     int ret = lua_pcall(L, 3, 0, 0);
-    if (ret != 0) {
+    if (ret != 0)
+    {
         lua_pop(L, 1);
     }
 
     assert(top == lua_gettop(L));
 }
 
-void Wortal::OnStartGame(const int success, const char* error) {
-    lua_State* L = onStartGameListener.m_L;
+void Wortal::OnStartGame(const int success, const char *error)
+{
+    lua_State *L = onStartGameListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onStartGameListener);
@@ -50,30 +54,51 @@ void Wortal::OnStartGame(const int success, const char* error) {
     lua_pushstring(L, error);
 
     int ret = lua_pcall(L, 3, 0, 0);
-    if (ret != 0) {
+    if (ret != 0)
+    {
         lua_pop(L, 1);
     }
 
     assert(top == lua_gettop(L));
 }
 
-void Wortal::OnPause(const int success) {
-    lua_State* L = onPauseListener.m_L;
+void Wortal::OnPause(const int success)
+{
+    lua_State *L = onPauseListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onPauseListener);
     lua_pushboolean(L, success);
 
     int ret = lua_pcall(L, 2, 0, 0);
-    if (ret != 0) {
+    if (ret != 0)
+    {
         lua_pop(L, 1);
     }
 
     assert(top == lua_gettop(L));
 }
 
-void Wortal::OnHapticFeedback(const int success, const char* error) {
-    lua_State* L = onHapticFeedbackListener.m_L;
+void Wortal::OnResume(const int success)
+{
+    lua_State *L = onResumeListener.m_L;
+    int top = lua_gettop(L);
+
+    lua_pushListener(L, onResumeListener);
+    lua_pushBoolean(L, success);
+
+    int ret = lua_pcall(L, 2, 0, 0);
+    if (ret != 0)
+    {
+        lua_pop(L, 1);
+    }
+
+    assert(top == lua_gettop(L));
+}
+
+void Wortal::OnHapticFeedback(const int success, const char *error)
+{
+    lua_State *L = onHapticFeedbackListener.m_L;
     int top = lua_gettop(L);
 
     lua_pushlistener(L, onHapticFeedbackListener);
@@ -81,14 +106,16 @@ void Wortal::OnHapticFeedback(const int success, const char* error) {
     lua_pushstring(L, error);
 
     int ret = lua_pcall(L, 3, 0, 0);
-    if (ret != 0) {
+    if (ret != 0)
+    {
         lua_pop(L, 1);
     }
 
     assert(top == lua_gettop(L));
 }
 
-int Wortal::IsInitialized(lua_State* L) {
+int Wortal::IsInitialized(lua_State *L)
+{
     int top = lua_gettop(onInitializeListener.m_L);
 
     lua_pushboolean(onInitializeListener.m_L, Wortal_isInitialized());
@@ -97,7 +124,8 @@ int Wortal::IsInitialized(lua_State* L) {
     return 1;
 }
 
-int Wortal::InitializeAsync(lua_State* L) {
+int Wortal::InitializeAsync(lua_State *L)
+{
     int top = lua_gettop(L);
 
     luaL_checklistener(L, 1, onInitializeListener);
@@ -108,7 +136,8 @@ int Wortal::InitializeAsync(lua_State* L) {
     return 0;
 }
 
-int Wortal::StartGameAsync(lua_State* L) {
+int Wortal::StartGameAsync(lua_State *L)
+{
     int top = lua_gettop(L);
 
     luaL_checklistener(L, 1, onStartGameListener);
@@ -119,7 +148,8 @@ int Wortal::StartGameAsync(lua_State* L) {
     return 0;
 }
 
-int Wortal::SetLoadingProgress(lua_State* L) {
+int Wortal::SetLoadingProgress(lua_State *L)
+{
     int top = lua_gettop(L);
 
     int progress = luaL_checkinteger(L, 1);
@@ -129,7 +159,8 @@ int Wortal::SetLoadingProgress(lua_State* L) {
     return 0;
 }
 
-int Wortal::SetPauseCallback(lua_State* L) {
+int Wortal::SetPauseCallback(lua_State *L)
+{
     int top = lua_gettop(L);
 
     luaL_checklistener(L, 1, onPauseListener);
@@ -140,7 +171,20 @@ int Wortal::SetPauseCallback(lua_State* L) {
     return 0;
 }
 
-int Wortal::PerformHapticFeedback(lua_State* L) {
+int Wortal::SetResumeCallback(lua_State *L)
+{
+    int top = lua_gettop(L);
+
+    luaL_checklistener(L, 1, onResumeListener);
+
+    Wortal_onResume(Wortal::OnResume);
+
+    assert(top == lua_gettop(L));
+    return 0;
+}
+
+int Wortal::PerformHapticFeedback(lua_State *L)
+{
     int top = lua_gettop(L);
 
     luaL_checklistener(L, 1, onHapticFeedbackListener);
@@ -151,14 +195,17 @@ int Wortal::PerformHapticFeedback(lua_State* L) {
     return 0;
 }
 
-int Wortal::GetSupportedAPIs(lua_State* L) {
+int Wortal::GetSupportedAPIs(lua_State *L)
+{
     int top = lua_gettop(L);
 
-    const char* data = Wortal_getSupportedAPIs();
-    if (data) {
+    const char *data = Wortal_getSupportedAPIs();
+    if (data)
+    {
         lua_pushstring(L, data);
     }
-    else {
+    else
+    {
         lua_pushnil(L);
     }
 
@@ -173,6 +220,7 @@ static const luaL_reg Module_methods[] = {
     {"is_initialized", Wortal::IsInitialized},
     {"set_loading_progress", Wortal::SetLoadingProgress},
     {"on_pause", Wortal::SetPauseCallback},
+    {"on_resume", Wortal::SetResumeCallback},
     {"perform_haptic_feedback", Wortal::PerformHapticFeedback},
     {"get_supported_apis", Wortal::GetSupportedAPIs},
 
@@ -261,10 +309,10 @@ static const luaL_reg Module_methods[] = {
     {"tournament_share", WortalTournament::ShareAsync},
     {"tournament_join", WortalTournament::JoinAsync},
 
-    {0, 0}
-};
+    {0, 0}};
 
-static void LuaInit(lua_State* L) {
+static void LuaInit(lua_State *L)
+{
     int top = lua_gettop(L);
 
     luaL_register(L, MODULE_NAME, Module_methods);
@@ -273,22 +321,26 @@ static void LuaInit(lua_State* L) {
     assert(top == lua_gettop(L));
 }
 
-dmExtension::Result InitializeWortalSdk(dmExtension::Params* params) {
+dmExtension::Result InitializeWortalSdk(dmExtension::Params *params)
+{
     LuaInit(params->m_L);
     return dmExtension::RESULT_OK;
 }
 
-dmExtension::Result FinalizeWortalSdk(dmExtension::Params* params) {
+dmExtension::Result FinalizeWortalSdk(dmExtension::Params *params)
+{
     return dmExtension::RESULT_OK;
 }
 
 #else // unsupported platforms
 
-dmExtension::Result InitializeWortalSdk(dmExtension::Params *params) {
+dmExtension::Result InitializeWortalSdk(dmExtension::Params *params)
+{
     return dmExtension::RESULT_OK;
 }
 
-dmExtension::Result FinalizeWortalSdk(dmExtension::Params *params) {
+dmExtension::Result FinalizeWortalSdk(dmExtension::Params *params)
+{
     return dmExtension::RESULT_OK;
 }
 
